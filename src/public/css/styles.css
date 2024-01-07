@@ -8,6 +8,10 @@ body {
     padding: 0;
 }
 
+a, a:visited, a:hover, a:active {
+    color: inherit;
+}
+
 .input {
     width: 100%;
     border: 1px solid rgb(163 163 163);
@@ -66,4 +70,50 @@ body {
 
 .login-form__login-btn {
     width: 100%;
+}
+
+.header {
+    background-color: #3c5a96;
+    width: 100%;
+    height: 60px;
+}
+
+.header__container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    height: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+a.header__logo {
+    color: white;
+    font-size: 24px;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.header__nav--list {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.header__nav--item {
+    margin-left: 20px;
+    color: white;
+    text-decoration: none;
+}
+
+a.header__nav--link {
+    text-decoration: none;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
 }
