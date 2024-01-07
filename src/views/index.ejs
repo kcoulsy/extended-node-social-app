@@ -1,18 +1,10 @@
 <%- include('partials/header'); -%>
 
-<div class="login-form__container">
-  <form class="login-form__form" action="/auth/login" method="post">
-    <h2>Log into Social App</h2>
-    <input class="input" type="text" placeholder="Enter your username" name="username" id="username" />
-    <input class="input" type="password" placeholder="Enter your password" name="password" id="password" />
-    <button class="btn btn--primary login-form__login-btn ">Login</button>
-    <div class="login-form__separator">
-      <div class="login-form__separator--line"></div>
-      <span>OR</span>
-      <div class="login-form__separator--line"></div>
-    </div>
-    <a href="/auth/register" class="btn btn--success">Create New Account</a>
-  </form>
-</div>
+<h1>Hey <%= user?.username %></h1>
 
+<% if (!user) { %>
+  <a href="/auth/login">Log in</a>
+  <a href="/auth/register">Register</a>
+<% } %>
+ 
 <%- include('partials/footer'); -%>
