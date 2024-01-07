@@ -33,8 +33,6 @@ export async function createUser({
     },
   });
 
-  console.log("created user", user);
-
   return user;
 }
 

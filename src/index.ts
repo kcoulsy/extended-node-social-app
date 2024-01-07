@@ -11,10 +11,12 @@ import { login } from "./services/auth";
 import prisma from "./db";
 import { User } from "@prisma/client";
 import postRouter from "./routes/post";
+import { intlFormatDistance } from "date-fns";
 
 declare module "fastify" {
   interface PassportUser extends User {}
 }
+
 const fastify = Fastify({
   logger: true,
 });
@@ -105,7 +107,18 @@ fastify.get("/", async function (request, reply) {
     },
   });
 
-  return reply.view("index", { posts });
+  const updatedPosts = posts.map((post) => ({
+    ...post,
+    createdAt: intlFormatDistance(post.createdAt, new Date()),
+    childPosts: post.childPosts
+      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+      .map((childPost) => ({
+        ...childPost,
+        createdAt: intlFormatDistance(childPost.createdAt, new Date()),
+      })),
+  }));
+
+  return reply.view("index", { posts: updatedPosts });
 });
 
 fastify.listen({ port: 3000 }, function (err, address) {

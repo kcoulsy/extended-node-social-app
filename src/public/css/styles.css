@@ -26,7 +26,7 @@ a, a:visited, a:hover, a:active {
 .btn {
     border: 1px solid transparent;
     border-radius: 6px;
-    padding: 12px 20px;
+    padding: 8px 16px;
     text-decoration: none;
     margin: 4px 2px;
     cursor: pointer;
@@ -122,8 +122,8 @@ ul.posts {
     list-style-type: none;
     margin: 0;
     padding: 0;
-    max-width: 800px;
     margin: 0 auto;
+    width: 100%;
 }
 
 li.posts__item {
@@ -131,18 +131,27 @@ li.posts__item {
     padding: 20px;
     background-color: white;
     border-radius: 3px;
-    box-shadow: 1px 1px 1px 3px rgb(131 128 128 / 26%);
     display: flex;
     gap: 20px;
 }
 
+li.comments__item {
+    margin-bottom: 10px;
+    padding: 10px;
+    background-color: white;
+    border-radius: 3px;
+    display: flex;
+    gap: 10px;
+}
+
+.posts__item--shadow {
+    box-shadow: 1px 1px 1px 3px rgb(131 128 128 / 26%);
+}
+
 .post__user {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    border-right: 1px solid #bfbfbf;
-    padding-right: 20px;
-    min-width: 130px;
+    justify-content: center;
+    align-items: flex-start;
 }
 
 
@@ -150,13 +159,17 @@ li.posts__item {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    margin-right: 10px;
 }
 
 .post__username {
     font-size: 16px;
     font-weight: 700;
     margin: 0;
+}
+
+.post__username > a {
+    color: #3c5a96;
+    text-decoration: none;
 }
 
 .post__body {
@@ -180,4 +193,54 @@ li.posts__item {
 
 .comments {
     padding: 0;
+}
+
+.wall__container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    margin-top: 20px;
+    max-width: 800px;
+}
+
+.create-post__form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.create-post__form-input {
+    width: 100%;
+    /* border: 1px solid rgb(163 163 163);
+    border-radius: 3px; */
+    box-sizing: border-box;
+    font-size: 16px;
+    padding: 12px 20px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.create-post__share-btn {
+    align-self: flex-end;
+    margin: 0;
+}
+
+.create-comment__form {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.create-comment__form-input {
+    flex: 1;
+    margin: 0;
+    padding: 8px 12px;
+}
+
+.create-comment__form-btn {
+    margin: 0;
+    margin-left: 10px;
 }
