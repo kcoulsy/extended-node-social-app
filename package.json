@@ -1,0 +1,31 @@
+{
+  "name": "extended-node-social-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "clean": "rimraf dist/",
+    "copy-files": "copyfiles -u 1 src/views/*.hbs src/views/partials/*.hbs src/**/*.css dist/",
+    "build": "npm run clean && tsc && npm run copy-files",
+    "start": "node dist/index.js",
+    "dev": "nodemon src/index.ts"
+  },
+  "keywords": [],
+  "author": "Kristian Coulson",
+  "license": "MIT",
+  "dependencies": {
+    "@fastify/view": "^8.2.0",
+    "ejs": "^3.1.9",
+    "fastify": "^4.25.2"
+  },
+  "devDependencies": {
+    "@types/ejs": "^3.1.5",
+    "@types/node": "^20.10.6",
+    "concurrently": "^8.2.2",
+    "copyfiles": "^2.4.1",
+    "nodemon": "^3.0.2",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
+  }
+}
