@@ -1,3 +1,4 @@
 dist/
 node_modules/
-main.db
+prisma/main.db
+.env

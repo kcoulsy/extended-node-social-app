@@ -8,13 +8,16 @@
     "copy-files": "copyfiles -u 1 src/views/*.hbs src/views/partials/*.hbs src/**/*.css dist/",
     "build": "npm run clean && tsc && npm run copy-files",
     "start": "node dist/index.js",
-    "dev": "nodemon src/index.ts"
+    "dev": "nodemon src/index.ts",
+    "db:push": "prisma db push",
+    "db:studio": "prisma studio"
   },
   "keywords": [],
   "author": "Kristian Coulson",
   "license": "MIT",
   "dependencies": {
     "@fastify/view": "^8.2.0",
+    "@prisma/client": "^5.7.1",
     "ejs": "^3.1.9",
     "fastify": "^4.25.2"
   },
@@ -24,6 +27,7 @@
     "concurrently": "^8.2.2",
     "copyfiles": "^2.4.1",
     "nodemon": "^3.0.2",
+    "prisma": "^5.7.1",
     "rimraf": "^5.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
