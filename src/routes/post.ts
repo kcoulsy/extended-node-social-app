@@ -12,7 +12,7 @@ export default function postRouter(
 
   fastify.post("/", async function (request, reply) {
     // @ts-ignore
-    const { title, content } = request.body;
+    const { title, content, parentPostId } = request.body;
     // const user = await createPost({ title, content });
 
     if (!request.user) {
@@ -23,6 +23,7 @@ export default function postRouter(
       data: {
         content,
         authorId: request.user.id,
+        parentPostId: parentPostId ? parseInt(parentPostId) : undefined,
       },
     });
 

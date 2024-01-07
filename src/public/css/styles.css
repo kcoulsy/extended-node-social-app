@@ -177,3 +177,7 @@ li.posts__item {
     margin: 0;
     align-self: flex-end;    
 }
+
+.comments {
+    padding: 0;
+}

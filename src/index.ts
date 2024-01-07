@@ -88,20 +88,24 @@ fastify.register(authRouter, { prefix: "/auth" });
 fastify.register(postRouter, { prefix: "/post" });
 
 fastify.get("/", async function (request, reply) {
-  try {
-    const posts = await prisma.post.findMany({
-      include: {
-        author: true,
+  const posts = await prisma.post.findMany({
+    where: {
+      parentPostId: null,
+    },
+    include: {
+      author: true,
+      childPosts: {
+        include: {
+          author: true,
+        },
       },
-      orderBy: {
-        createdAt: "desc",
-      },
-    });
-    return reply.view("index", { posts });
-  } catch (err) {
-    fastify.log.error(err);
-  }
-  return reply.view("index");
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+
+  return reply.view("index", { posts });
 });
 
 fastify.listen({ port: 3000 }, function (err, address) {

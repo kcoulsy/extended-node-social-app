@@ -1,29 +1,76 @@
 <%- include('partials/header'); -%>
 
-
 <main class="container">
   <h1>Homepage</h1>
 
   <% if (user) { %>
   <form action="/post" method="post">
-    <input class="input" type="text" name="content" placeholder="What's on your mind?">
-    <input class="btn btn--primary" type="submit" value="Post">
+    <input
+      class="input"
+      type="text"
+      name="content"
+      placeholder="What's on your mind?"
+    />
+    <input class="btn btn--primary" type="submit" value="Post" />
   </form>
-  <% } %>
-
-  
-  <% if (posts?.length) { %>
+  <% } %> <% if (posts?.length) { %>
 
   <ul class="posts">
     <% posts.forEach(post => { %>
-    <li class="posts__item">
+    <li class="posts__item" data-post-id="<%= post.id %>">
       <div class="post__user">
-        <img class="post__avatar" src="https://i.stack.imgur.com/HQwHI.jpg" alt="<%= post.author.username %>">
+        <img
+          class="post__avatar"
+          src="https://i.stack.imgur.com/HQwHI.jpg"
+          alt="<%= post.author.username %>"
+        />
         <h3 class="post__username"><%= post.author.username %></h3>
       </div>
       <div class="post__body">
         <p class="post__content"><%= post.content %></p>
         <p class="post__date"><%= post.createdAt %></p>
+
+        <% if (user) { %>
+        <div class="post__actions">
+          <button class="btn">Add Reaction</button>
+          <button class="btn" data-action="add-comment">Comment</button>
+        </div>
+        <% } %>
+        <div class="post__comments">
+          <% if (user) { %>
+          <form action="/post" method="post">
+            <input type="hidden" name="parentPostId" value="<%= post.id %>" />
+            <input
+              class="input"
+              type="text"
+              name="content"
+              placeholder="What's on your mind?"
+            />
+            <input class="btn btn--primary" type="submit" value="Add Reply" />
+          </form>
+
+          <% } %> <% if (post.childPosts?.length) { %>
+          <h3>Comments</h3>
+          <ul class="comments">
+            <% post.childPosts.forEach(comment => { %>
+            <li class="posts__item" data-comment-id="<%= comment.id %>">
+              <div class="post__user">
+                <img
+                  class="post__avatar"
+                  src="https://i.stack.imgur.com/HQwHI.jpg"
+                  alt="<%= comment.author.username %>"
+                />
+                <h3 class="post__username"><%= comment.author.username %></h3>
+              </div>
+              <div class="post__body">
+                <p class="post__content"><%= comment.content %></p>
+                <p class="post__date"><%= comment.createdAt %></p>
+              </div>
+            </li>
+            <% }) %>
+          </ul>
+          <% } %>
+        </div>
       </div>
     </li>
     <% }) %>
@@ -32,7 +79,6 @@
   <% } else { %>
   <p>No posts yet</p>
   <% } %>
-
 </main>
- 
+
 <%- include('partials/footer'); -%>
