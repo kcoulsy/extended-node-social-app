@@ -1,7 +1,47 @@
+/* Variables */
+:root {
+    --color-brand: #3c5a96;
+    --color-primary: rgb(8, 102, 255);
+    --color-success: rgb(40, 167, 69);
+    --color-danger: #dc3545;
+    
+    --color-white: #fff;
+    --color-black: #222;
+    --color-gray-50: #f7f7f7;
+    --color-gray-100: #d7d7d7;
+    --color-gray-300: rgb(163 163 163);
+    --color-gray-500: #777;
+
+    --font-size-1: 12px;
+    --font-size-2: 14px;
+    --font-size-3: 16px;
+    --font-size-4: 18px;
+    --font-size-5: 20px;
+
+    --spacing-1: 2px;
+    --spacing-2: 4px;
+    --spacing-3: 8px;
+    --spacing-4: 12px;
+    --spacing-5: 16px;
+    --spacing-6: 20px;
+    --spacing-7: 24px;
+
+    --border-radius: 3px;
+    --border-radius-lg: 6px;
+    --border-radius-full: 50%;
+
+    --box-shadow: 1px 1px 1px 3px rgb(131 128 128 / 26%);
+
+    --avatar-size: 40px;
+    --wall-width: 800px;
+    --container-width: 1200px;
+    --header-height: 60px;
+}
+
 body {
-    background-color: #f7f7f7;
+    background-color: var(--color-gray-50);
     font-family: 'Roboto', sans-serif;
-    font-size: 16px;
+    font-size: var(--font-size-3);
     font-weight: 300;
     line-height: 1.5;
     margin: 0;
@@ -14,32 +54,32 @@ a, a:visited, a:hover, a:active {
 
 .input {
     width: 100%;
-    border: 1px solid rgb(163 163 163);
-    border-radius: 3px;
+    border: 1px solid var(--color-gray-300);
+    border-radius: var(--border-radius);
     box-sizing: border-box;
-    font-size: 16px;
-    padding: 12px 20px;
-    margin-top: 6px;
-    margin-bottom: 16px;
+    font-size: var(--font-size-3);
+    padding: var(--spacing-4) var(--spacing-6);
+    margin-top: var(--spacing-2);
+    margin-bottom: var(--spacing-5);
 }
 
 .btn {
     border: 1px solid transparent;
-    border-radius: 6px;
-    padding: 8px 16px;
+    border-radius: var(--border-radius-lg);
+    padding: var(--spacing-3) var(--spacing-5);
     text-decoration: none;
-    margin: 4px 2px;
+    margin: var(--spacing-2) var(--spacing-1);
     cursor: pointer;
 }
 
 .btn--primary {
-    background-color: rgb(8, 102, 255);
-    color: white;
+    background-color: var(--color-primary);
+    color: var(--color-white);
 }
 
 .btn--success {
-    background-color: rgb(40, 167, 69);
-    color: white !important;
+    background-color: var(--color-success);
+    color: var(--color-white) !important;
 }
 
 .login-form__container {
@@ -58,14 +98,14 @@ a, a:visited, a:hover, a:active {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
 }
 
 .login-form__separator--line {
     width: 45%;
     height: 1px;
-    background-color: #d7d7d7;
+    background-color: var(--color-gray-100);
 }
 
 .login-form__login-btn {
@@ -73,9 +113,9 @@ a, a:visited, a:hover, a:active {
 }
 
 .header {
-    background-color: #3c5a96;
+    background-color: var(--color-brand);
     width: 100%;
-    height: 60px;
+    height: var(--header-height);
 }
 
 .header__container {
@@ -83,13 +123,13 @@ a, a:visited, a:hover, a:active {
     justify-content: space-between;
     align-items: center;
     height: 100%;
-    max-width: 1200px;
+    max-width: var(--container-width);
     margin: 0 auto;
 }
 
 a.header__logo {
-    color: white;
-    font-size: 24px;
+    color: var(--color-white);
+    font-size: var(--font-size-5);
     font-weight: 700;
     text-decoration: none;
 }
@@ -104,8 +144,8 @@ a.header__logo {
 }
 
 .header__nav--item {
-    margin-left: 20px;
-    color: white;
+    margin-left: var(--spacing-6);
+    color: var(--color-white);
     text-decoration: none;
 }
 
@@ -114,7 +154,7 @@ a.header__nav--link {
 }
 
 .container {
-    max-width: 1200px;
+    max-width: var(--container-width);
     margin: 0 auto;
 }
 
@@ -127,25 +167,25 @@ ul.posts {
 }
 
 li.posts__item {
-    margin-bottom: 20px;
-    padding: 20px;
-    background-color: white;
-    border-radius: 3px;
+    margin-bottom: var(--spacing-6);
+    padding: var(--spacing-6);
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
     display: flex;
-    gap: 20px;
+    gap: var(--spacing-6);
 }
 
 li.comments__item {
-    margin-bottom: 10px;
-    padding: 10px;
-    background-color: white;
-    border-radius: 3px;
+    margin-bottom: var(--spacing-3);
+    padding: var(--spacing-3);
+    background-color: var(--color-white);
+    border-radius: var(--border-radius);
     display: flex;
-    gap: 10px;
+    gap: var(--spacing-3);
 }
 
 .posts__item--shadow {
-    box-shadow: 1px 1px 1px 3px rgb(131 128 128 / 26%);
+    box-shadow: var(--box-shadow);
 }
 
 .post__user {
@@ -156,19 +196,19 @@ li.comments__item {
 
 
 .post__avatar {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: var(--avatar-size);
+    height: var(--avatar-size);
+    border-radius: var(--border-radius-full);
 }
 
 .post__username {
-    font-size: 16px;
+    font-size: var(--font-size-3);
     font-weight: 700;
     margin: 0;
 }
 
 .post__username > a {
-    color: #3c5a96;
+    color: var(--color-brand);
     text-decoration: none;
 }
 
@@ -179,14 +219,14 @@ li.comments__item {
 }
 
 .post__content {
-    margin-top: 10px;
-    margin-bottom: 10px;
+    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
     flex: 1;
 }
 
 .post__date {
-    font-size: 14px;
-    color: #777;
+    font-size: var(--font-size-2);
+    color: var(--color-gray-500);
     margin: 0;
     align-self: flex-end;    
 }
@@ -200,8 +240,8 @@ li.comments__item {
     flex-direction: column;
     align-items: center;
     margin: 0 auto;
-    margin-top: 20px;
-    max-width: 800px;
+    margin-top: var(--spacing-6);
+    max-width: var(--wall-width);
 }
 
 .create-post__form {
@@ -209,18 +249,16 @@ li.comments__item {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: var(--spacing-6);
 }
 
 .create-post__form-input {
     width: 100%;
-    /* border: 1px solid rgb(163 163 163);
-    border-radius: 3px; */
     box-sizing: border-box;
-    font-size: 16px;
-    padding: 12px 20px;
-    margin-top: 4px;
-    margin-bottom: 4px;
+    font-size: var(--font-size-3);
+    padding: var(--spacing-4) var(--spacing-6);
+    margin-top: var(--spacing-2);
+    margin-bottom:var(--spacing-2);
 }
 
 .create-post__share-btn {
@@ -237,10 +275,10 @@ li.comments__item {
 .create-comment__form-input {
     flex: 1;
     margin: 0;
-    padding: 8px 12px;
+    padding: var(--spacing-4) var(--spacing-5);
 }
 
 .create-comment__form-btn {
     margin: 0;
-    margin-left: 10px;
+    margin-left: var(--spacing-3);
 }
