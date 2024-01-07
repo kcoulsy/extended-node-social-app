@@ -11,10 +11,36 @@ datasource db {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
-  username  String   @unique
+  id        Int        @id @default(autoincrement())
+  username  String     @unique
   name      String?
   password  String
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  posts     Post[]
+  reactions Reaction[]
+}
+
+model Post {
+  id           Int        @id @default(autoincrement())
+  content      String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  author       User       @relation(fields: [authorId], references: [id])
+  authorId     Int
+  parentPostId Int?
+  parentPost   Post?      @relation("PostToPost", fields: [parentPostId], references: [id])
+  childPosts   Post[]     @relation("PostToPost")
+  Reaction     Reaction[]
+}
+
+model Reaction {
+  id        Int      @id @default(autoincrement())
+  type      String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
 }

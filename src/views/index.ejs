@@ -3,6 +3,36 @@
 
 <main class="container">
   <h1>Homepage</h1>
+
+  <% if (user) { %>
+  <form action="/post" method="post">
+    <input class="input" type="text" name="content" placeholder="What's on your mind?">
+    <input class="btn btn--primary" type="submit" value="Post">
+  </form>
+  <% } %>
+
+  
+  <% if (posts?.length) { %>
+
+  <ul class="posts">
+    <% posts.forEach(post => { %>
+    <li class="posts__item">
+      <div class="post__user">
+        <img class="post__avatar" src="https://i.stack.imgur.com/HQwHI.jpg" alt="<%= post.author.username %>">
+        <h3 class="post__username"><%= post.author.username %></h3>
+      </div>
+      <div class="post__body">
+        <p class="post__content"><%= post.content %></p>
+        <p class="post__date"><%= post.createdAt %></p>
+      </div>
+    </li>
+    <% }) %>
+  </ul>
+
+  <% } else { %>
+  <p>No posts yet</p>
+  <% } %>
+
 </main>
  
 <%- include('partials/footer'); -%>

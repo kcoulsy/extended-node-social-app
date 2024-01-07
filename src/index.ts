@@ -10,7 +10,11 @@ import { Strategy as LocalStrategy } from "passport-local";
 import { login } from "./services/auth";
 import prisma from "./db";
 import { User } from "@prisma/client";
+import postRouter from "./routes/post";
 
+declare module "fastify" {
+  interface PassportUser extends User {}
+}
 const fastify = Fastify({
   logger: true,
 });
@@ -81,8 +85,22 @@ fastify.addHook("preHandler", function (request, reply, done) {
 });
 
 fastify.register(authRouter, { prefix: "/auth" });
+fastify.register(postRouter, { prefix: "/post" });
 
 fastify.get("/", async function (request, reply) {
+  try {
+    const posts = await prisma.post.findMany({
+      include: {
+        author: true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    return reply.view("index", { posts });
+  } catch (err) {
+    fastify.log.error(err);
+  }
   return reply.view("index");
 });
 

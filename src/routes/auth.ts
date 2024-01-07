@@ -1,8 +1,12 @@
-import { FastifyInstance } from "fastify";
+import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import fastifyPassport from "@fastify/passport";
 import { createUser } from "../services/auth";
 
-export default async function authRouter(fastify: FastifyInstance) {
+export default async function authRouter(
+  fastify: FastifyInstance,
+  options: FastifyPluginOptions,
+  done: () => void
+) {
   fastify.get("/login", function (request, reply) {
     if (request.user) {
       return reply.redirect("/");
@@ -49,4 +53,6 @@ export default async function authRouter(fastify: FastifyInstance) {
 
     return reply.redirect("/");
   });
+
+  done();
 }

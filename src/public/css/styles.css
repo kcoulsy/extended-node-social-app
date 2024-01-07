@@ -39,7 +39,7 @@ a, a:visited, a:hover, a:active {
 
 .btn--success {
     background-color: rgb(40, 167, 69);
-    color: white;
+    color: white !important;
 }
 
 .login-form__container {
@@ -116,4 +116,64 @@ a.header__nav--link {
 .container {
     max-width: 1200px;
     margin: 0 auto;
+}
+
+ul.posts {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+li.posts__item {
+    margin-bottom: 20px;
+    padding: 20px;
+    background-color: white;
+    border-radius: 3px;
+    box-shadow: 1px 1px 1px 3px rgb(131 128 128 / 26%);
+    display: flex;
+    gap: 20px;
+}
+
+.post__user {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-right: 1px solid #bfbfbf;
+    padding-right: 20px;
+    min-width: 130px;
+}
+
+
+.post__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    margin-right: 10px;
+}
+
+.post__username {
+    font-size: 16px;
+    font-weight: 700;
+    margin: 0;
+}
+
+.post__body {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+}
+
+.post__content {
+    margin-top: 10px;
+    margin-bottom: 10px;
+    flex: 1;
+}
+
+.post__date {
+    font-size: 14px;
+    color: #777;
+    margin: 0;
+    align-self: flex-end;    
 }
