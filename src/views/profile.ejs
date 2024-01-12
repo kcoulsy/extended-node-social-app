@@ -1,0 +1,58 @@
+<%- include('partials/header'); -%>
+
+<main class="container">
+  <section id="profile-header">
+    <div class="profile-header__container">
+      <div class="profile-header__user">
+        <img
+          class="profile-header__avatar"
+          src="https://i.stack.imgur.com/HQwHI.jpg"
+          alt="<%= profileUser.username %>"
+        />
+        <h2 class="profile-header__username">
+          <a href=""> <%= profileUser.name %> </a>
+        </h2>
+      </div>
+      <div class="profile-header__stats">
+        <div class="profile-header__stat">
+          <span class="profile-header__stat--number"
+            ><%= profileUser.username.length %></span
+          >
+          <span class="profile-header__stat--label">Posts</span>
+        </div>
+        <div class="profile-header__stat">
+          <span class="profile-header__stat--number"
+            ><%= profileUser.followedBy.length || 0 %></span
+          >
+          <span class="profile-header__stat--label">Followers</span>
+        </div>
+        <div class="profile-header__stat">
+          <span class="profile-header__stat--number"
+            ><%= profileUser.following.length || 0 %></span
+          >
+          <span class="profile-header__stat--label">Following</span>
+        </div>
+      </div>
+      <div class="profile-header__actions">
+        <% if (user && user.id !== profileUser.id) { %> <% if (true) { %>
+        <button
+          class="profile-header__action profile-header__action--unfollow"
+          data-user-id="<%= profileUser.id %>"
+        >
+          Unfollow
+        </button>
+        <% } else { %>
+        <button
+          class="profile-header__action profile-header__action--follow"
+          data-user-id="<%= profileUser.id %>"
+        >
+          Follow
+        </button>
+        <% } %> <% } %>
+      </div>
+    </div>
+  </section>
+  <%- include('partials/timeline'); -%>
+</main>
+
+<%- include('partials/footer'); -%>

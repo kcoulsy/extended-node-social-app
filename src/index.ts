@@ -11,9 +11,9 @@ import { login } from "./services/auth";
 import prisma from "./db";
 import { User } from "@prisma/client";
 import postRouter from "./routes/post";
-import { intlFormatDistance } from "date-fns";
 import v1Router from "./routes/api/v1";
 import homepageRouter from "./routes/homepage";
+import profileRouter from "./routes/profile";
 
 declare module "fastify" {
   interface PassportUser extends User {}
@@ -89,6 +89,7 @@ fastify.addHook("preHandler", function (request, reply, done) {
 });
 
 fastify.register(homepageRouter, { prefix: "/" });
+fastify.register(profileRouter, { prefix: "/profile" });
 fastify.register(authRouter, { prefix: "/auth" });
 fastify.register(postRouter, { prefix: "/post" });
 fastify.register(v1Router, { prefix: "/api/v1" });

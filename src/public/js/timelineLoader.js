@@ -5,6 +5,13 @@ const loadedTimelineItemIds = [...allInitialPosts].map(
   (post) => post.dataset.timelineItemId
 );
 
+const isProfilePage = window.location.pathname.includes("/profile/");
+const username = window.location.pathname.split("/")[2];
+
+const apiRoute = isProfilePage
+  ? `/api/v1/timeline/user/${username}`
+  : "/api/v1/timeline";
+
 if (!!window.IntersectionObserver) {
   const observer = new IntersectionObserver(async (entries) => {
     const entry = entries[0];
@@ -17,7 +24,7 @@ if (!!window.IntersectionObserver) {
       const lastPostId = lastTimelineItem.dataset.timelineItemId;
 
       const res = await fetch(
-        `${window.location.origin}/api/v1/timeline?cursor=${lastPostId}`,
+        `${window.location.origin}${apiRoute}?cursor=${lastPostId}`,
         {}
       );
 
@@ -47,5 +54,7 @@ if (!!window.IntersectionObserver) {
     }
   }, {});
 
-  observer.observe(document.querySelector(".posts__item:last-child"));
+  if (loadedTimelineItemIds.length >= 10) {
+    observer.observe(document.querySelector(".posts__item:last-child"));
+  }
 }

@@ -13,9 +13,10 @@ export async function createUser({
   name,
   password,
 }: CreateUser): Promise<User> {
+  const usernameLowercase = username.toLowerCase();
   const existingUser = await prisma.user.findUnique({
     where: {
-      username,
+      username: usernameLowercase,
     },
   });
 
@@ -27,7 +28,7 @@ export async function createUser({
 
   const user = await prisma.user.create({
     data: {
-      username,
+      username: usernameLowercase,
       name,
       password: hashedPassword,
     },

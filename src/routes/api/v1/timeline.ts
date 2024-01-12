@@ -4,6 +4,7 @@ import {
   getUserTimelinePaginated,
 } from "../../../services/timeline";
 import { mapPostWithChildCreatedAtToReadable } from "../../../utils/mapPostWithChildCreatedAtToReadable";
+import prisma from "../../../db";
 
 export default function timelineRouter(
   fastify: FastifyInstance,
@@ -38,20 +39,25 @@ export default function timelineRouter(
       cursor?: string;
     };
     Params: {
-      userId: string;
+      username: string;
     };
   }>({
     method: "GET",
-    url: "/user/:userId",
+    url: "/user/:username",
     handler: async function (request, reply) {
       const cursor = request.query?.cursor
         ? parseInt(request.query.cursor)
         : undefined;
 
-      const timelineItems = await getUserTimelinePaginated(
-        parseInt(request.params.userId),
-        cursor
-      );
+      const user = await prisma.user.findUnique({
+        where: { username: request.params.username.toLowerCase() },
+      });
+
+      if (!user) {
+        return reply.status(404).send({ message: "User not found" });
+      }
+
+      const timelineItems = await getUserTimelinePaginated(user.id, cursor);
 
       return reply.send({
         timelineItems: timelineItems.map((i) => ({
