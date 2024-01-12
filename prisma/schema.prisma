@@ -11,32 +11,49 @@ datasource db {
 }
 
 model User {
-  id        Int        @id @default(autoincrement())
-  username  String     @unique
-  name      String?
-  password  String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  posts     Post[]
-  reactions Reaction[]
+  id             Int            @id @default(autoincrement())
+  username       String         @unique
+  name           String?
+  password       String
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+  targettedPosts Post[]         @relation("UserToPost")
+  reactions      Reaction[]
+  TimelineItem   TimelineItem[]
+  followedBy     User[]         @relation("UserFollows")
+  following      User[]         @relation("UserFollows")
+  Post           Post[]
 }
 
 model Post {
-  id           Int        @id @default(autoincrement())
+  id           Int            @id @default(autoincrement())
   content      String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  author       User       @relation(fields: [authorId], references: [id])
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+  author       User           @relation(fields: [authorId], references: [id])
   authorId     Int
+  targetUser   User?          @relation("UserToPost", fields: [targetUserId], references: [id])
+  targetUserId Int?
   parentPostId Int?
-  parentPost   Post?      @relation("PostToPost", fields: [parentPostId], references: [id])
-  childPosts   Post[]     @relation("PostToPost")
+  parentPost   Post?          @relation("PostToPost", fields: [parentPostId], references: [id])
+  childPosts   Post[]         @relation("PostToPost")
   Reaction     Reaction[]
+  TimelineItem TimelineItem[]
 }
 
 model Reaction {
   id        Int      @id @default(autoincrement())
   type      String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  author    User     @relation(fields: [authorId], references: [id])
+  authorId  Int
+  post      Post     @relation(fields: [postId], references: [id])
+  postId    Int
+}
+
+model TimelineItem {
+  id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   author    User     @relation(fields: [authorId], references: [id])
