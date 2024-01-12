@@ -1,4 +1,14 @@
+import { Post, User } from "@prisma/client";
 import prisma from "../db";
+import { mapPostWithChildCreatedAtToReadable } from "../utils/mapPostWithChildCreatedAtToReadable";
+
+export type PostWithAuthorAndChildren = PostWithAuthor & {
+  childPosts: PostWithAuthor[];
+};
+
+export type PostWithAuthor = Post & {
+  author: User;
+};
 
 export async function createPost({
   content,
@@ -20,6 +30,11 @@ export async function createPost({
     },
     include: {
       author: true,
+      childPosts: {
+        include: {
+          author: true,
+        },
+      },
     },
   });
 
@@ -32,5 +47,5 @@ export async function createPost({
     });
   }
 
-  return post;
+  return mapPostWithChildCreatedAtToReadable(post);
 }
