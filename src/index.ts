@@ -12,6 +12,7 @@ import prisma from "./db";
 import { User } from "@prisma/client";
 import postRouter from "./routes/post";
 import { intlFormatDistance } from "date-fns";
+import v1Router from "./routes/api/v1";
 
 declare module "fastify" {
   interface PassportUser extends User {}
@@ -88,6 +89,7 @@ fastify.addHook("preHandler", function (request, reply, done) {
 
 fastify.register(authRouter, { prefix: "/auth" });
 fastify.register(postRouter, { prefix: "/post" });
+fastify.register(v1Router, { prefix: "/api/v1" });
 
 fastify.get("/", async function (request, reply) {
   const posts = await prisma.post.findMany({

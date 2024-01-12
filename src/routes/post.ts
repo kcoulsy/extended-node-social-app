@@ -1,6 +1,7 @@
 import { z } from "zod";
 import prisma from "../db";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import { createPost } from "../services/posts";
 
 export default function postRouter(
   fastify: FastifyInstance,
@@ -24,12 +25,10 @@ export default function postRouter(
         return reply.redirect("/auth/login");
       }
 
-      await prisma.post.create({
-        data: {
-          content,
-          authorId: request.user.id,
-          parentPostId: parentPostId ? parseInt(parentPostId) : undefined,
-        },
+      await createPost({
+        content,
+        parentPostId,
+        userId: request.user.id,
       });
 
       return reply.redirect("/");
