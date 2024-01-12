@@ -3,6 +3,7 @@ import {
   getAllTimelineItemsPaginated,
   getUserTimelinePaginated,
 } from "../../../services/timeline";
+import { mapPostWithChildCreatedAtToReadable } from "../../../utils/mapPostWithChildCreatedAtToReadable";
 
 export default function timelineRouter(
   fastify: FastifyInstance,
@@ -23,7 +24,12 @@ export default function timelineRouter(
 
       const timelineItems = await getAllTimelineItemsPaginated(cursor);
 
-      return reply.send({ timelineItems });
+      return reply.send({
+        timelineItems: timelineItems.map((i) => ({
+          ...i,
+          post: mapPostWithChildCreatedAtToReadable(i.post),
+        })),
+      });
     },
   });
 
@@ -47,7 +53,12 @@ export default function timelineRouter(
         cursor
       );
 
-      return reply.send({ timelineItems });
+      return reply.send({
+        timelineItems: timelineItems.map((i) => ({
+          ...i,
+          post: mapPostWithChildCreatedAtToReadable(i.post),
+        })),
+      });
     },
   });
 

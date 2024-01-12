@@ -2,7 +2,6 @@ import { createPostHTML } from "./createPostHTML.js";
 const form = document.querySelector(".create-post__form");
 const posts = document.querySelector(".posts");
 
-console.log("createPost");
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
 

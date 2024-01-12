@@ -1,6 +1,6 @@
 {
   "watch": ["src"],
-  "exclude": ["src/public/js"],
+  "exclude": ["src/public/*"],
   "ext": "ts,css,hbs,js,json",
   "exec": "concurrently \"npx tsc --watch\" \"ts-node src/index.ts\""
 }

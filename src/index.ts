@@ -13,6 +13,7 @@ import { User } from "@prisma/client";
 import postRouter from "./routes/post";
 import { intlFormatDistance } from "date-fns";
 import v1Router from "./routes/api/v1";
+import homepageRouter from "./routes/homepage";
 
 declare module "fastify" {
   interface PassportUser extends User {}
@@ -87,41 +88,10 @@ fastify.addHook("preHandler", function (request, reply, done) {
   done();
 });
 
+fastify.register(homepageRouter, { prefix: "/" });
 fastify.register(authRouter, { prefix: "/auth" });
 fastify.register(postRouter, { prefix: "/post" });
 fastify.register(v1Router, { prefix: "/api/v1" });
-
-fastify.get("/", async function (request, reply) {
-  const posts = await prisma.post.findMany({
-    where: {
-      parentPostId: null,
-    },
-    include: {
-      author: true,
-      childPosts: {
-        include: {
-          author: true,
-        },
-      },
-    },
-    orderBy: {
-      createdAt: "desc",
-    },
-  });
-
-  const updatedPosts = posts.map((post) => ({
-    ...post,
-    createdAt: intlFormatDistance(post.createdAt, new Date()),
-    childPosts: post.childPosts
-      .sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
-      .map((childPost) => ({
-        ...childPost,
-        createdAt: intlFormatDistance(childPost.createdAt, new Date()),
-      })),
-  }));
-
-  return reply.view("index", { posts: updatedPosts });
-});
 
 fastify.listen({ port: 3000 }, function (err, address) {
   if (err) {

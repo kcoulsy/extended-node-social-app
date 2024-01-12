@@ -1,5 +1,4 @@
 import { z } from "zod";
-import prisma from "../db";
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { createPost } from "../services/posts";
 

@@ -1,11 +1,12 @@
-console.log("createPostHTML");
 /**
  *
  * @param {import("../../services/posts").PostWithAuthorAndChildren} post
+ * @param {string} timelineItemId
  */
-export function createPostHTML(post) {
+export function createPostHTML(post, timelineItemId) {
+  const isLoggedIn = Boolean(window.user?.id);
   const html = `
-  <li class="posts__item posts__item--shadow" data-post-id="${post.id}">
+  <li class="posts__item posts__item--shadow animation__fade-in" data-timeline-item-id="${timelineItemId}">
   <div class="post__user">
     <a href="/profile/${post.author.username}">
       <img
@@ -24,24 +25,28 @@ export function createPostHTML(post) {
     <p class="post__date">${post.createdAt}</p>
     <div class="post__collab">
     <div class="post__comments">
-      <form action="/post" method="post" class="create-comment__form">
-        <input
-          type="hidden"
-          name="parentPostId"
-          value="${post.id}"
-        />
-        <input
-          class="input create-comment__form-input"
-          type="text"
-          name="content"
-          placeholder="Add a comment"
-        />
-        <input
-          class="btn btn--primary create-comment__share-btn"
-          type="submit"
-          value="Reply"
-        />
-      </form>
+      ${
+        isLoggedIn
+          ? `<form action="/post" method="post" class="create-comment__form">
+      <input
+        type="hidden"
+        name="parentPostId"
+        value="${post.id}"
+      />
+      <input
+        class="input create-comment__form-input"
+        type="text"
+        name="content"
+        placeholder="Add a comment"
+      />
+      <input
+        class="btn btn--primary create-comment__share-btn"
+        type="submit"
+        value="Reply"
+      />
+    </form>`
+          : ""
+      }
       ${
         post.childPosts.length
           ? `<h5>Comments</h5>

@@ -16,27 +16,30 @@
         value="Share"
       />
     </form>
-    <% } %> <% if (posts?.length) { %>
+    <% } %> <% if (timelineItems?.length) { %>
 
     <ul class="posts">
-      <% posts.forEach(post => { %>
-      <li class="posts__item posts__item--shadow" data-post-id="<%= post.id %>">
+      <% timelineItems.forEach(timelineItem => { %>
+      <li
+        class="posts__item posts__item--shadow"
+        data-timeline-item-id="<%= timelineItem.id %>"
+      >
         <div class="post__user">
-          <a href="/profile/<%= post.author.username %>">
+          <a href="/profile/<%= timelineItem.post.author.username %>">
             <img
               class="post__avatar"
               src="https://i.stack.imgur.com/HQwHI.jpg"
-              alt="<%= post.author.username %>"
+              alt="<%= timelineItem.post.author.username %>"
           /></a>
         </div>
         <div class="post__body">
           <h3 class="post__username">
-            <a href="/profile/<%= post.author.username %>">
-              <%= post.author.name %>
+            <a href="/profile/<%= timelineItem.post.author.username %>">
+              <%= timelineItem.post.author.name %>
             </a>
           </h3>
-          <p class="post__content"><%= post.content %></p>
-          <p class="post__date"><%= post.createdAt %></p>
+          <p class="post__content"><%= timelineItem.post.content %></p>
+          <p class="post__date"><%= timelineItem.post.createdAt %></p>
           <div class="post__collab">
             <div class="post__comments">
               <% if (user) { %>
@@ -44,7 +47,7 @@
                 <input
                   type="hidden"
                   name="parentPostId"
-                  value="<%= post.id %>"
+                  value="<%= timelineItem.post.id %>"
                 />
                 <input
                   class="input create-comment__form-input"
@@ -59,10 +62,10 @@
                 />
               </form>
 
-              <% } %> <% if (post.childPosts?.length) { %>
+              <% } %> <% if (timelineItem.post.childPosts?.length) { %>
               <h5>Comments</h5>
               <ul class="comments">
-                <% post.childPosts.forEach(comment => { %>
+                <% timelineItem.post.childPosts.forEach(comment => { %>
                 <li class="comments__item" data-comment-id="<%= comment.id %>">
                   <div class="post__user">
                     <a href="/profile/<%= comment.author.username %>">
