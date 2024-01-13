@@ -16,12 +16,13 @@
       <div class="profile-header__stats">
         <div class="profile-header__stat">
           <span class="profile-header__stat--number"
-            ><%= profileUser.username.length %></span
+            ><%= profileUser.TimelineItem.length %></span
           >
           <span class="profile-header__stat--label">Posts</span>
         </div>
         <div class="profile-header__stat">
-          <span class="profile-header__stat--number"
+          <span
+            class="profile-header__stat--number profile-header__stat--followers"
             ><%= profileUser.followedBy.length || 0 %></span
           >
           <span class="profile-header__stat--label">Followers</span>
@@ -34,17 +35,18 @@
         </div>
       </div>
       <div class="profile-header__actions">
-        <% if (user && user.id !== profileUser.id) { %> <% if (true) { %>
+        <% if (user && user.id !== profileUser.id) { %> <% if
+        (isFollowedByLoggedInuser) { %>
         <button
           class="profile-header__action profile-header__action--unfollow"
-          data-user-id="<%= profileUser.id %>"
+          data-username="<%= profileUser.username %>"
         >
           Unfollow
         </button>
         <% } else { %>
         <button
           class="profile-header__action profile-header__action--follow"
-          data-user-id="<%= profileUser.id %>"
+          data-username="<%= profileUser.username %>"
         >
           Follow
         </button>

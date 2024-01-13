@@ -22,7 +22,7 @@ export default function profileRouter(
       include: {
         followedBy: true,
         following: true,
-        Post: true,
+        TimelineItem: true,
       },
     });
 
@@ -31,6 +31,9 @@ export default function profileRouter(
     }
 
     const timelineItems = await getUserTimelinePaginated(user.id);
+    const isFollowedByLoggedInuser = user.followedBy.some(
+      (follower) => follower.id === request.user?.id
+    );
 
     return reply.view("profile", {
       timelineItems: timelineItems.map((timelineItem) => ({
@@ -38,6 +41,7 @@ export default function profileRouter(
         post: mapPostWithChildCreatedAtToReadable(timelineItem.post),
       })),
       profileUser: user,
+      isFollowedByLoggedInuser,
     });
   });
 

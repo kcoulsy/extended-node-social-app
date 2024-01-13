@@ -331,9 +331,8 @@ li.comments__item {
 }
 
 .profile-header__stats {
-    display: flex;
-    justify-content: center;
-    align-items: center;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
     margin-top: var(--spacing-3);
 }
 
