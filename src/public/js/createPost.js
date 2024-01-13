@@ -1,6 +1,5 @@
 import { createPostHTML } from "./createPostHTML.js";
 const form = document.querySelector(".create-post__form");
-const posts = document.querySelector(".posts");
 
 form?.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -21,7 +20,7 @@ form?.addEventListener("submit", async (e) => {
 
   const html = createPostHTML(post);
 
-  posts.insertAdjacentHTML("afterbegin", html);
+  document.querySelector(".posts").insertAdjacentHTML("afterbegin", html);
 
   form.reset();
 });

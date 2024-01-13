@@ -1,3 +1,4 @@
+import { bindCreateCommentForms } from "./createComment.js";
 import { createPostHTML } from "./createPostHTML.js";
 
 export function initTimelineLoader(
@@ -5,6 +6,8 @@ export function initTimelineLoader(
   apiRoute = "/api/v1/timeline"
 ) {
   console.log("initing observer");
+  bindCreateCommentForms();
+
   const allInitialPosts = document.querySelectorAll(
     `${container} .posts__item`
   );
@@ -48,6 +51,8 @@ export function initTimelineLoader(
         document
           .querySelector(`${container} .posts`)
           .insertAdjacentHTML("beforeend", html);
+
+        bindCreateCommentForms();
 
         observer.unobserve(lastTimelineItem);
 

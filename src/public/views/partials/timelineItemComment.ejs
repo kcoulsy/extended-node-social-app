@@ -1,0 +1,20 @@
+<li class="comments__item" data-comment-id="<%= comment.id %>">
+  <div class="post__user">
+    <a href="/profile/<%= comment.author.username %>">
+      <img
+        class="post__avatar"
+        src="https://i.stack.imgur.com/HQwHI.jpg"
+        alt="<%= comment.author.username %>"
+      />
+    </a>
+  </div>
+  <div class="post__body">
+    <h3 class="post__username">
+      <a href="/profile/<%= comment.author.username %>">
+        <%= comment.author.name %>
+      </a>
+    </h3>
+    <p class="post__content"><%= comment.content %></p>
+    <p class="post__date"><%= comment.createdAt %></p>
+  </div>
+</li>

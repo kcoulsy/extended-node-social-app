@@ -33,5 +33,34 @@ export default function postRouter(
     },
   });
 
+  fastify.route<{
+    Body: {
+      content: string;
+    };
+    Params: {
+      postId: string;
+    };
+  }>({
+    method: "POST",
+    url: "/:postId/comment",
+    handler: async function (request, reply) {
+      const { content } = request.body;
+      const { postId } = request.params;
+
+      if (!request.user) {
+        return reply.redirect("/auth/login");
+      }
+
+      const post = await createPost({
+        content,
+        parentPostId: postId,
+        userId: request.user.id,
+      });
+
+      return reply.send({
+        post,
+      });
+    },
+  });
   done();
 }

@@ -1,7 +1,11 @@
 import "./ejs.js";
 
-const template = await fetch(
+const timelineItemTemplate = await fetch(
   window.location.origin + "/assets/views/partials/timelineItem.ejs"
+).then((res) => res.text());
+
+const timelineItemCommentTemplate = await fetch(
+  window.location.origin + "/assets/views/partials/timelineItemComment.ejs"
 ).then((res) => res.text());
 
 /**
@@ -10,11 +14,29 @@ const template = await fetch(
  * @param {string} timelineItemId
  */
 export function createPostHTML(post, timelineItemId) {
-  return ejs.render(template, {
-    timelineItem: {
-      id: timelineItemId,
-      post: post,
-      user: window.user,
+  return ejs.render(
+    timelineItemTemplate,
+    {
+      timelineItem: {
+        id: timelineItemId,
+        post: post,
+        user: window.user,
+      },
     },
+    {
+      includer: (path, data, ...rest) => {
+        if (path === "timelineItemComment") {
+          return { filename: path, template: timelineItemCommentTemplate };
+        }
+        return { filename: path, template: "" };
+      },
+    }
+  );
+}
+
+export function createCommentHTML(comment) {
+  return ejs.render(timelineItemCommentTemplate, {
+    comment,
+    user: window.user,
   });
 }
