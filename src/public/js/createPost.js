@@ -1,4 +1,6 @@
+import { bindCreateCommentForms } from "./createComment.js";
 import { createPostHTML } from "./createPostHTML.js";
+import { bindReactionHandler } from "./reaction.js";
 const form = document.querySelector(".create-post__form");
 
 form?.addEventListener("submit", async (e) => {
@@ -26,4 +28,7 @@ form?.addEventListener("submit", async (e) => {
   document.querySelector(".posts").insertAdjacentHTML("afterbegin", html);
 
   form.reset();
+
+  bindCreateCommentForms();
+  bindReactionHandler();
 });

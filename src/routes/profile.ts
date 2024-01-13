@@ -30,7 +30,12 @@ export default function profileRouter(
       return reply.redirect("/");
     }
 
-    const timelineItems = await getUserTimelinePaginated(user.id);
+    const timelineItems = await getUserTimelinePaginated(
+      user.id,
+      undefined,
+      request.user?.id
+    );
+
     const isFollowedByLoggedInuser = user.followedBy.some(
       (follower) => follower.id === request.user?.id
     );

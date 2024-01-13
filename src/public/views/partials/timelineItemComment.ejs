@@ -19,25 +19,37 @@
       <div
         class="post__reactions <% if (user) { %>post__reactions--active<% } %>"
       >
-        <button class="post__reaction-btn" data-reaction="thumb">
+        <button
+          class="post__reaction-btn <%= comment.userReactions?.like ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="like"
+        >
           👍
           <span class="post__reaction-count"
-            ><%= comment?.reactions?.thumb || 0 %></span
+            ><%= comment?.reactions?.like || 0 %></span
           >
         </button>
-        <button class="post__reaction-btn" data-reaction="smile">
+        <button
+          class="post__reaction-btn <%= comment.userReactions?.smile ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="smile"
+        >
           😀
           <span class="post__reaction-count"
             ><%= comment?.reactions?.smile || 0 %></span
           >
         </button>
-        <button class="post__reaction-btn" data-reaction="star">
+        <button
+          class="post__reaction-btn <%= comment.userReactions?.star ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="star"
+        >
           ⭐
           <span class="post__reaction-count"
             ><%= comment?.reactions?.star || 0 %></span
           >
         </button>
-        <button class="post__reaction-btn" data-reaction="heart">
+        <button
+          class="post__reaction-btn <%= comment.userReactions?.heart ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="heart"
+        >
           ❤️
           <span class="post__reaction-count"
             ><%= comment?.reactions?.heart || 0 %></span

@@ -1,6 +1,7 @@
 <li
   class="posts__item posts__item--shadow"
   data-timeline-item-id="<%= timelineItem.id %>"
+  data-post-id="<%= timelineItem.post.id %>"
 >
   <div class="post__user">
     <a href="/profile/<%= timelineItem.post.author.username %>">
@@ -31,25 +32,37 @@
       <div
         class="post__reactions <% if (user) { %>post__reactions--active<% } %>"
       >
-        <button class="post__reaction-btn" data-reaction="thumb">
+        <button
+          class="post__reaction-btn <%= timelineItem.post.userReactions?.like ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="like"
+        >
           👍
           <span class="post__reaction-count"
-            ><%= timelineItem.post?.reactions?.thumb || 0 %></span
+            ><%= timelineItem.post?.reactions?.like || 0 %></span
           >
         </button>
-        <button class="post__reaction-btn" data-reaction="smile">
+        <button
+          class="post__reaction-btn <%= timelineItem.post.userReactions?.smile ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="smile"
+        >
           😀
           <span class="post__reaction-count"
             ><%= timelineItem.post?.reactions?.smile || 0 %></span
           >
         </button>
-        <button class="post__reaction-btn" data-reaction="star">
+        <button
+          class="post__reaction-btn <%= timelineItem.post.userReactions?.star ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="star"
+        >
           ⭐
           <span class="post__reaction-count"
             ><%= timelineItem.post?.reactions?.star || 0 %></span
           >
         </button>
-        <button class="post__reaction-btn" data-reaction="heart">
+        <button
+          class="post__reaction-btn <%= timelineItem.post.userReactions?.heart ? 'post__reaction-btn--selected': '' %>"
+          data-reaction="heart"
+        >
           ❤️
           <span class="post__reaction-count"
             ><%= timelineItem.post?.reactions?.heart || 0 %></span

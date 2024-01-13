@@ -11,7 +11,10 @@ export default function homepageRouter(
   done: () => void
 ) {
   fastify.get("/", async function (request, reply) {
-    const timelineItems = await getAllTimelineItemsPaginated();
+    const timelineItems = await getAllTimelineItemsPaginated(
+      undefined,
+      request.user?.id
+    );
     let followingTimelineItems;
     if (request.user) {
       followingTimelineItems = await getUsersFollowingTimelinePaginated(

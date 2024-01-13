@@ -6,6 +6,7 @@ import {
 } from "../../../services/timeline";
 import { mapPostWithChildCreatedAtToReadable } from "../../../utils/mapPostWithChildCreatedAtToReadable";
 import prisma from "../../../db";
+import { getHasUserReactionsToPosts } from "../../../services/reaction";
 
 export default function timelineRouter(
   fastify: FastifyInstance,
@@ -24,7 +25,10 @@ export default function timelineRouter(
         ? parseInt(request.query.cursor)
         : undefined;
 
-      const timelineItems = await getAllTimelineItemsPaginated(cursor);
+      const timelineItems = await getAllTimelineItemsPaginated(
+        cursor,
+        request.user?.id
+      );
 
       return reply.send({
         timelineItems,
@@ -82,7 +86,11 @@ export default function timelineRouter(
         return reply.status(404).send({ message: "User not found" });
       }
 
-      const timelineItems = await getUserTimelinePaginated(user.id, cursor);
+      const timelineItems = await getUserTimelinePaginated(
+        user.id,
+        cursor,
+        request.user?.id
+      );
 
       return reply.send({
         timelineItems,

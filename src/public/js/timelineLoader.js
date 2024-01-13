@@ -1,5 +1,6 @@
 import { bindCreateCommentForms } from "./createComment.js";
 import { createPostHTML } from "./createPostHTML.js";
+import { bindReactionHandler } from "./reaction.js";
 
 export function initTimelineLoader(
   container = "",
@@ -7,6 +8,7 @@ export function initTimelineLoader(
 ) {
   console.log("initing observer");
   bindCreateCommentForms();
+  bindReactionHandler();
 
   const allInitialPosts = document.querySelectorAll(
     `${container} .posts__item`
@@ -53,6 +55,7 @@ export function initTimelineLoader(
           .insertAdjacentHTML("beforeend", html);
 
         bindCreateCommentForms();
+        bindReactionHandler();
 
         observer.unobserve(lastTimelineItem);
 

@@ -1,4 +1,5 @@
 import { createCommentHTML } from "./createPostHTML.js";
+import { bindReactionHandler } from "./reaction.js";
 
 export function bindCreateCommentForms() {
   // clear all submit event listeners
@@ -47,6 +48,9 @@ export function bindCreateCommentForms() {
       }
 
       form.reset();
+
+      bindCreateCommentForms();
+      bindReactionHandler();
     });
   });
 }
