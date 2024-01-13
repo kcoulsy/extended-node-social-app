@@ -1,4 +1,5 @@
 import prisma from "../db";
+import { mapPostWithChildCreatedAtToReadable } from "../utils/mapPostWithChildCreatedAtToReadable";
 
 export async function getAllTimelineItemsPaginated(cursor?: number) {
   const response = await prisma.timelineItem.findMany({
@@ -18,7 +19,10 @@ export async function getAllTimelineItemsPaginated(cursor?: number) {
     },
   });
 
-  return response;
+  return response.map((timelineItem) => ({
+    ...timelineItem,
+    post: mapPostWithChildCreatedAtToReadable(timelineItem.post),
+  }));
 }
 
 export async function getUserTimelinePaginated(
@@ -45,7 +49,10 @@ export async function getUserTimelinePaginated(
     },
   });
 
-  return response;
+  return response.map((timelineItem) => ({
+    ...timelineItem,
+    post: mapPostWithChildCreatedAtToReadable(timelineItem.post),
+  }));
 }
 
 export async function getUsersFollowingTimelinePaginated(
@@ -77,5 +84,8 @@ export async function getUsersFollowingTimelinePaginated(
     },
   });
 
-  return response;
+  return response.map((timelineItem) => ({
+    ...timelineItem,
+    post: mapPostWithChildCreatedAtToReadable(timelineItem.post),
+  }));
 }

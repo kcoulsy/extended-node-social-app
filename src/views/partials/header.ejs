@@ -1,37 +1,39 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Social App</title>
-  <link rel="stylesheet" href="/assets/css/normalize.css">
-  <link rel="stylesheet" href="/assets/css/styles.css">
-</head>
-<body>
-  <header class="header">
-    <div class="header__container">
-      <a class="header__logo" href="/">Social App</a>
-      <nav class="header__nav">
-        <ul class="header__nav--list">
-          <% if (!user) { %>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Social App</title>
+    <link rel="stylesheet" href="/assets/css/normalize.css" />
+    <link rel="stylesheet" href="/assets/css/styles.css" />
+  </head>
+  <body>
+    <header class="header">
+      <div class="header__container">
+        <a class="header__logo" href="/">Social App</a>
+        <nav class="header__nav">
+          <ul class="header__nav--list">
+            <% if (!user) { %>
             <li class="header__nav--item">
               <a class="header__nav--link" href="/auth/login">Log in</a>
             </li>
             <li class="header__nav--item">
               <a class="header__nav--link" href="/auth/register">Register</a>
             </li>
-          <% } else { %>
+            <% } else { %>
+            <li class="header__nav--item">Welcome <%= user.name %></li>
             <li class="header__nav--item">
-              Welcome <%= user.username %>
-            </li>
-            <li class="header__nav--item">
-              <a class="header__nav--link" href="/profile">Profile</a>
+              <a class="header__nav--link" href="/profile/<%= user.username %>"
+                >Profile</a
+              >
             </li>
             <li class="header__nav--item">
               <a class="header__nav--link" href="/auth/logout">Log out</a>
             </li>
-          <% } %>
-        </ul>
-      </nav>
-    </div>
-  </header>
+            <% } %>
+          </ul>
+        </nav>
+      </div>
+    </header>
+  </body>
+</html>

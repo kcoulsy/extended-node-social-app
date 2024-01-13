@@ -1,60 +1,75 @@
 import { createPostHTML } from "./createPostHTML.js";
 
-const allInitialPosts = document.querySelectorAll(".posts__item");
-const loadedTimelineItemIds = [...allInitialPosts].map(
-  (post) => post.dataset.timelineItemId
-);
+export function initTimelineLoader(
+  container = "",
+  apiRoute = "/api/v1/timeline"
+) {
+  console.log("initing observer");
+  const allInitialPosts = document.querySelectorAll(
+    `${container} .posts__item`
+  );
+  const loadedTimelineItemIds = [...allInitialPosts].map(
+    (post) => post.dataset.timelineItemId
+  );
 
-const isProfilePage = window.location.pathname.includes("/profile/");
-const username = window.location.pathname.split("/")[2];
+  if (!!window.IntersectionObserver) {
+    const observer = new IntersectionObserver(async (entries) => {
+      const entry = entries[0];
 
-const apiRoute = isProfilePage
-  ? `/api/v1/timeline/user/${username}`
-  : "/api/v1/timeline";
+      if (entry.isIntersecting) {
+        const lastTimelineItem = document.querySelector(
+          `${container} .posts__item:last-child`
+        );
 
-if (!!window.IntersectionObserver) {
-  const observer = new IntersectionObserver(async (entries) => {
-    const entry = entries[0];
+        const lastPostId = lastTimelineItem.dataset.timelineItemId;
 
-    if (entry.isIntersecting) {
-      const lastTimelineItem = document.querySelector(
-        ".posts__item:last-child"
-      );
+        const res = await fetch(
+          `${window.location.origin}${apiRoute}?cursor=${lastPostId}`,
+          {}
+        );
 
-      const lastPostId = lastTimelineItem.dataset.timelineItemId;
+        const { timelineItems } = await res.json();
 
-      const res = await fetch(
-        `${window.location.origin}${apiRoute}?cursor=${lastPostId}`,
-        {}
-      );
+        const filteredTimelineItems = timelineItems.filter(
+          (timelineItem) =>
+            !loadedTimelineItemIds.includes(`${timelineItem.id}`)
+        );
 
-      const { timelineItems } = await res.json();
+        filteredTimelineItems.forEach((timelineItem) => {
+          loadedTimelineItemIds.push(`${timelineItem.id}`);
+        });
 
-      const filteredTimelineItems = timelineItems.filter(
-        (timelineItem) => !loadedTimelineItemIds.includes(`${timelineItem.id}`)
-      );
+        const html = filteredTimelineItems
+          .map((timelineItem) =>
+            createPostHTML(timelineItem.post, `${timelineItem.id}`)
+          )
+          .join("");
 
-      filteredTimelineItems.forEach((timelineItem) => {
-        loadedTimelineItemIds.push(`${timelineItem.id}`);
-      });
+        document
+          .querySelector(`${container} .posts`)
+          .insertAdjacentHTML("beforeend", html);
 
-      const html = filteredTimelineItems
-        .map((timelineItem) =>
-          createPostHTML(timelineItem.post, `${timelineItem.id}`)
-        )
-        .join("");
+        observer.unobserve(lastTimelineItem);
 
-      document.querySelector(".posts").insertAdjacentHTML("beforeend", html);
-
-      observer.unobserve(lastTimelineItem);
-
-      if (filteredTimelineItems.length >= 10) {
-        observer.observe(document.querySelector(".posts__item:last-child"));
+        if (filteredTimelineItems.length >= 10) {
+          observer.observe(
+            document.querySelector(`${container} .posts__item:last-child`)
+          );
+        }
       }
-    }
-  }, {});
+    }, {});
 
-  if (loadedTimelineItemIds.length >= 10) {
-    observer.observe(document.querySelector(".posts__item:last-child"));
+    if (loadedTimelineItemIds.length >= 10) {
+      observer.observe(
+        document.querySelector(`${container} .posts__item:last-child`)
+      );
+    }
+
+    return () => {
+      console.log("disconnecting observer");
+      return observer.disconnect();
+    };
   }
+
+  return () => {};
 }

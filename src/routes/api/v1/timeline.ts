@@ -2,6 +2,7 @@ import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import {
   getAllTimelineItemsPaginated,
   getUserTimelinePaginated,
+  getUsersFollowingTimelinePaginated,
 } from "../../../services/timeline";
 import { mapPostWithChildCreatedAtToReadable } from "../../../utils/mapPostWithChildCreatedAtToReadable";
 import prisma from "../../../db";
@@ -26,10 +27,34 @@ export default function timelineRouter(
       const timelineItems = await getAllTimelineItemsPaginated(cursor);
 
       return reply.send({
-        timelineItems: timelineItems.map((i) => ({
-          ...i,
-          post: mapPostWithChildCreatedAtToReadable(i.post),
-        })),
+        timelineItems,
+      });
+    },
+  });
+
+  fastify.route<{
+    Querystring: {
+      cursor?: string;
+    };
+  }>({
+    method: "GET",
+    url: "/following",
+    handler: async function (request, reply) {
+      const cursor = request.query?.cursor
+        ? parseInt(request.query.cursor)
+        : undefined;
+
+      if (!request.user) {
+        return reply.status(401).send({ message: "Unauthorized" });
+      }
+
+      const timelineItems = await getUsersFollowingTimelinePaginated(
+        request.user?.id,
+        cursor
+      );
+
+      return reply.send({
+        timelineItems,
       });
     },
   });
@@ -60,10 +85,7 @@ export default function timelineRouter(
       const timelineItems = await getUserTimelinePaginated(user.id, cursor);
 
       return reply.send({
-        timelineItems: timelineItems.map((i) => ({
-          ...i,
-          post: mapPostWithChildCreatedAtToReadable(i.post),
-        })),
+        timelineItems,
       });
     },
   });

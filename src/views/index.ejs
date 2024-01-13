@@ -1,5 +1,31 @@
 <%- include('partials/header'); -%>
 
-<main class="container"><%- include('partials/timeline'); -%></main>
+<main class="container homepage">
+  <% if (user) { %>
+  <ul class="wall-tabs" aria-role="tablist">
+    <li
+      class="wall-tabs__tab wall-tabs__tab--active"
+      data-tab="all"
+      aria-role="tab"
+    >
+      All
+    </li>
+    <li class="wall-tabs__tab" data-tab="following" aria-role="tab">
+      Following
+    </li>
+  </ul>
+  <div
+    class="wall-tabs__content animation__fade-in wall-tabs__content--active"
+    data-tab="all"
+  >
+    <%- include('partials/timeline', { timelineItems: allTimelineItems }); -%>
+  </div>
+  <div class="wall-tabs__content animation__fade-in" data-tab="following">
+    <%- include('partials/timeline', { timelineItems: followingTimelineItems });
+    -%>
+  </div>
+  <% } else { %> <%- include('partials/timeline', { timelineItems:
+  allTimelineItems }); -%> <% } %>
+</main>
 
 <%- include('partials/footer'); -%>

@@ -8,8 +8,10 @@
     --color-white: #fff;
     --color-black: #222;
     --color-gray-50: #f7f7f7;
+    --color-gray-75: #f2f2f2;
     --color-gray-100: #d7d7d7;
-    --color-gray-300: rgb(163 163 163);
+    --color-gray-300: rgb(167, 167, 167);
+    --color-gray-200: #979595;
     --color-gray-500: #777;
 
     --font-size-1: 12px;
@@ -293,7 +295,7 @@ li.comments__item {
 }
 
 .animation__fade-in {
-    animation: 1.5s fadeIn;
+    animation: 0.5s fadeIn;
 } 
 
 .profile-header__container {
@@ -375,4 +377,48 @@ li.comments__item {
     border-radius: var(--border-radius);
     padding: var(--spacing-3) var(--spacing-5);
     text-decoration: none;
+}
+
+
+.wall-tabs {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    margin-top: var(--spacing-3);
+    margin-bottom: var(--spacing-3);
+    max-width: var(--wall-width);
+    margin: 0 auto;
+    list-style: none;
+    padding: 0;
+}
+
+.wall-tabs__tab {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--color-black);
+    background-color: var(--color-gray-50);
+    padding: var(--spacing-5) var(--spacing-5);
+    text-decoration: none;
+    cursor: pointer;
+    border: 1px solid var(--color-gray-100);
+}
+
+.wall-tabs__tab:first-child {
+    border-right: none;
+}
+
+.wall-tabs__tab--active {
+    background-color: var(--color-gray-100);
+}
+
+.wall-tabs__tab:hover {
+    background-color: var(--color-gray-100);
+}
+
+.wall-tabs__content {
+    display: none;
+}
+
+.wall-tabs__content--active {
+    display: block;
 }

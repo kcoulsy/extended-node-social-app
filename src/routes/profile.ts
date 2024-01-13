@@ -36,10 +36,7 @@ export default function profileRouter(
     );
 
     return reply.view("profile", {
-      timelineItems: timelineItems.map((timelineItem) => ({
-        ...timelineItem,
-        post: mapPostWithChildCreatedAtToReadable(timelineItem.post),
-      })),
+      timelineItems: timelineItems,
       profileUser: user,
       isFollowedByLoggedInuser,
     });
