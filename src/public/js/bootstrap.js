@@ -18,4 +18,8 @@
       "/api/v1/timeline/user/" + window.location.pathname.split("/")[2]
     );
   }
+
+  if (document.querySelector(".create-post__form")) {
+    await import("./createPost.js");
+  }
 })();
