@@ -15,6 +15,36 @@
       </a>
     </h3>
     <p class="post__content"><%= comment.content %></p>
-    <p class="post__date"><%= comment.createdAt %></p>
+    <div class="post__footer">
+      <div
+        class="post__reactions <% if (user) { %>post__reactions--active<% } %>"
+      >
+        <button class="post__reaction-btn" data-reaction="thumb">
+          👍
+          <span class="post__reaction-count"
+            ><%= comment?.reactions?.thumb || 0 %></span
+          >
+        </button>
+        <button class="post__reaction-btn" data-reaction="smile">
+          😀
+          <span class="post__reaction-count"
+            ><%= comment?.reactions?.smile || 0 %></span
+          >
+        </button>
+        <button class="post__reaction-btn" data-reaction="star">
+          ⭐
+          <span class="post__reaction-count"
+            ><%= comment?.reactions?.star || 0 %></span
+          >
+        </button>
+        <button class="post__reaction-btn" data-reaction="heart">
+          ❤️
+          <span class="post__reaction-count"
+            ><%= comment?.reactions?.heart || 0 %></span
+          >
+        </button>
+      </div>
+      <p class="post__date"><%= comment.createdAt %></p>
+    </div>
   </div>
 </li>
