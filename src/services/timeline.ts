@@ -8,6 +8,7 @@ export async function getAllTimelineItemsPaginated(cursor?: number) {
     cursor: cursor ? { id: cursor } : undefined,
     orderBy: { id: "desc" },
     include: {
+      author: true,
       post: {
         include: {
           author: true,
@@ -31,13 +32,32 @@ export async function getUserTimelinePaginated(
 ) {
   const response = await prisma.timelineItem.findMany({
     where: {
-      authorId: userId,
+      OR: [
+        {
+          authorId: userId,
+        },
+        {
+          AND: [
+            {
+              post: {
+                authorId: userId,
+              },
+            },
+            {
+              post: {
+                parentPostId: null,
+              },
+            },
+          ],
+        },
+      ],
     },
     take: 10,
     skip: cursor ? 1 : 0,
     cursor: cursor ? { id: cursor } : undefined,
     orderBy: { id: "desc" },
     include: {
+      author: true,
       post: {
         include: {
           author: true,
@@ -66,13 +86,32 @@ export async function getUsersFollowingTimelinePaginated(
 
   const response = await prisma.timelineItem.findMany({
     where: {
-      authorId: { in: followingId?.following.map((user) => user.id) },
+      OR: [
+        {
+          authorId: { in: followingId?.following.map((user) => user.id) },
+        },
+        {
+          AND: [
+            {
+              post: {
+                authorId: userId,
+              },
+            },
+            {
+              post: {
+                parentPostId: null,
+              },
+            },
+          ],
+        },
+      ],
     },
     take: 10,
     skip: cursor ? 1 : 0,
     cursor: cursor ? { id: cursor } : undefined,
     orderBy: { id: "desc" },
     include: {
+      author: true,
       post: {
         include: {
           author: true,

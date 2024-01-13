@@ -13,14 +13,15 @@ const timelineItemCommentTemplate = await fetch(
  * @param {import("../../services/posts").PostWithAuthorAndChildren} post
  * @param {string} timelineItemId
  */
-export function createPostHTML(post, timelineItemId) {
+export function createPostHTML(post, timelineItemId, user) {
   return ejs.render(
     timelineItemTemplate,
     {
       timelineItem: {
         id: timelineItemId,
         post: post,
-        user: window.user,
+        user: user || window.user,
+        author: user || window.user,
       },
     },
     {

@@ -12,9 +12,19 @@
   </div>
   <div class="post__body">
     <h3 class="post__username">
+      <% if (timelineItem.post.author.id !== timelineItem.author?.id) { %>
       <a href="/profile/<%= timelineItem.post.author.username %>">
         <%= timelineItem.post.author.name %>
       </a>
+      →
+      <a href="/profile/<%= timelineItem.author.username %>">
+        <%= timelineItem.author.name %>
+      </a>
+      <% } else { %>
+      <a href="/profile/<%= timelineItem.post.author.username %>">
+        <%= timelineItem.post.author.name %>
+      </a>
+      <% } %>
     </h3>
     <p class="post__content"><%= timelineItem.post.content %></p>
     <p class="post__date"><%= timelineItem.post.createdAt %></p>

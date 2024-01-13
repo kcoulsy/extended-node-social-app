@@ -41,7 +41,7 @@ export async function createPost({
   if (!parentPostId) {
     await prisma.timelineItem.create({
       data: {
-        authorId: userId,
+        authorId: targetUserId || userId,
         postId: post.id,
       },
     });
