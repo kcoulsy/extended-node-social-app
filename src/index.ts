@@ -14,6 +14,7 @@ import postRouter from "./routes/post";
 import v1Router from "./routes/api/v1";
 import homepageRouter from "./routes/homepage";
 import profileRouter from "./routes/profile";
+import fastifyCompress = require("@fastify/compress");
 
 declare module "fastify" {
   interface PassportUser extends User {}
@@ -22,6 +23,8 @@ declare module "fastify" {
 const fastify = Fastify({
   logger: true,
 });
+
+fastify.register(fastifyCompress);
 
 fastify.register(fastifyView, {
   engine: {
