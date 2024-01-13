@@ -30,7 +30,7 @@ fastify.register(fastifyView, {
   engine: {
     ejs,
   },
-  root: __dirname + "/views",
+  root: __dirname + "/public/views",
   includeViewExtension: true,
 });
 

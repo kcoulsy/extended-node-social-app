@@ -1,0 +1,26 @@
+<section id="wall" class="wall__container">
+  <% if (user) { %>
+  <form action="/post" method="post" class="create-post__form">
+    <input
+      class="input create-post__form-input"
+      type="text"
+      name="content"
+      placeholder="What's on your mind?"
+    />
+    <input
+      class="btn btn--primary create-post__share-btn"
+      type="submit"
+      value="Share"
+    />
+  </form>
+  <% } %> <% if (timelineItems?.length) { %>
+
+  <ul class="posts">
+    <% timelineItems.forEach(timelineItem => { %> <%- include('timelineItem', {
+    timelineItem }) %> <% }) %>
+  </ul>
+
+  <% } else { %>
+  <p>No posts yet</p>
+  <% } %>
+</section>
