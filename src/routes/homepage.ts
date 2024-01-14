@@ -3,7 +3,6 @@ import {
   getAllTimelineItemsPaginated,
   getUsersFollowingTimelinePaginated,
 } from "../services/timeline";
-import { mapPostWithChildCreatedAtToReadable } from "../utils/mapPostWithChildCreatedAtToReadable";
 
 export default function homepageRouter(
   fastify: FastifyInstance,

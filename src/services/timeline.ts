@@ -1,15 +1,33 @@
+import { TimelineItem, User } from "@prisma/client";
 import prisma from "../db";
-import { mapPostWithChildCreatedAtToReadable } from "../utils/mapPostWithChildCreatedAtToReadable";
+import { mapPostSortChildPosts } from "../utils/mapPostSortChildPosts";
+import { mapPostWithChildCreatedAt } from "../utils/mapPostWithChildCreatedAt";
 import {
   getHasUserReactionsToPosts,
   getReactionCountsForPosts,
 } from "./reaction";
+import { PostWithAuthorAndChildren } from "./posts";
+import { getPostIdsFromTimelineItems } from "../utils/getPostIdsFromTimelineItems";
+import { mapTimelineItemsWithPostReactions } from "../utils/mapTimelineItemsWithPostReactions";
+import { LoggedInUserReactions } from "../types";
 
+export type TimelineItemWithPostAndChildren = TimelineItem & {
+  author: User;
+  post: PostWithAuthorAndChildren;
+};
+
+/**
+ * Gets all timeline items for all users
+ *
+ * @param cursor number; the id of the last timeline item to get
+ * @param loggedInUserId number; the id of the logged in user to get their reactions to posts
+ * @returns
+ */
 export async function getAllTimelineItemsPaginated(
   cursor?: number,
-  userId?: number
+  loggedInUserId?: number
 ) {
-  const response = await prisma.timelineItem.findMany({
+  const timelineItems = await prisma.timelineItem.findMany({
     take: 10,
     skip: cursor ? 1 : 0,
     cursor: cursor ? { id: cursor } : undefined,
@@ -27,50 +45,45 @@ export async function getAllTimelineItemsPaginated(
     },
   });
 
-  const postIds = response.reduce((acc, item) => {
-    if (item.post) {
-      acc.push(item.post.id);
-
-      if (item.post.childPosts) {
-        acc.push(...item.post.childPosts.map((p) => p.id));
-      }
-    }
-    return acc;
-  }, [] as number[]);
-
+  const postIds = getPostIdsFromTimelineItems(timelineItems);
   const postsReactions = await getReactionCountsForPosts(postIds);
-
-  let userReactions: { [key: string]: Record<string, boolean> } | undefined =
-    undefined;
-
-  if (userId) {
-    userReactions = await getHasUserReactionsToPosts(postIds, userId);
+  let userReactions: Record<string, LoggedInUserReactions> = {};
+  if (loggedInUserId) {
+    userReactions = await getHasUserReactionsToPosts(postIds, loggedInUserId);
   }
 
-  return response.map((timelineItem) => {
-    const post = mapPostWithChildCreatedAtToReadable(timelineItem.post);
+  const timelineItemsWithReactions = mapTimelineItemsWithPostReactions(
+    timelineItems,
+    postsReactions,
+    userReactions
+  );
+
+  return timelineItemsWithReactions.map((timelineItem) => {
+    const postWithSortedChildren = mapPostSortChildPosts(timelineItem.post);
+    const post = mapPostWithChildCreatedAt(postWithSortedChildren);
     return {
       ...timelineItem,
       post: {
         ...post,
-        reactions: postsReactions[post.id],
-        userReactions: userReactions?.[post.id],
-        childPosts: post.childPosts.map((childPost) => ({
-          ...childPost,
-          reactions: postsReactions[childPost.id],
-          userReactions: userReactions?.[childPost.id],
-        })),
       },
     };
   });
 }
 
+/**
+ * Gets the timeline items for a specific user for their profile page
+ *
+ * @param userId number; the id of the user whose timeline items to get
+ * @param cursor number; the id of the last timeline item to get
+ * @param loggedInUserId number; the id of the logged in user to get their reactions to posts
+ * @returns
+ */
 export async function getUserTimelinePaginated(
   userId: number,
   cursor?: number,
   loggedInUserId?: number
 ) {
-  const response = await prisma.timelineItem.findMany({
+  const timelineItems = await prisma.timelineItem.findMany({
     where: {
       OR: [
         {
@@ -109,54 +122,48 @@ export async function getUserTimelinePaginated(
     },
   });
 
-  const postIds = response.reduce((acc, item) => {
-    if (item.post) {
-      acc.push(item.post.id);
-
-      if (item.post.childPosts) {
-        acc.push(...item.post.childPosts.map((p) => p.id));
-      }
-    }
-    return acc;
-  }, [] as number[]);
-
+  const postIds = getPostIdsFromTimelineItems(timelineItems);
   const postsReactions = await getReactionCountsForPosts(postIds);
-
-  let userReactions: { [key: string]: Record<string, boolean> } | undefined =
-    undefined;
-
+  let userReactions: Record<string, LoggedInUserReactions> = {};
   if (loggedInUserId) {
     userReactions = await getHasUserReactionsToPosts(postIds, loggedInUserId);
   }
 
-  return response.map((timelineItem) => {
-    const post = mapPostWithChildCreatedAtToReadable(timelineItem.post);
+  const timelineItemsWithReactions = mapTimelineItemsWithPostReactions(
+    timelineItems,
+    postsReactions,
+    userReactions
+  );
+
+  return timelineItemsWithReactions.map((timelineItem) => {
+    const postWithSortedChildren = mapPostSortChildPosts(timelineItem.post);
+    const post = mapPostWithChildCreatedAt(postWithSortedChildren);
     return {
       ...timelineItem,
       post: {
         ...post,
-        reactions: postsReactions[post.id],
-        userReactions: userReactions?.[post.id],
-        childPosts: post.childPosts.map((childPost) => ({
-          ...childPost,
-          reactions: postsReactions[childPost.id],
-          userReactions: userReactions?.[childPost.id],
-        })),
       },
     };
   });
 }
 
+/**
+ * Gets the timeline items for a specific user for their following timeline
+ *
+ * @param loggedInUserId number; the id of the logged in user to get their reactions to posts
+ * @param cursor
+ * @returns
+ */
 export async function getUsersFollowingTimelinePaginated(
-  userId: number,
+  loggedInUserId: number,
   cursor?: number
 ) {
   const followingId = await prisma.user.findUnique({
-    where: { id: userId },
+    where: { id: loggedInUserId },
     select: { following: { select: { id: true } } },
   });
 
-  const response = await prisma.timelineItem.findMany({
+  const timelineItems = await prisma.timelineItem.findMany({
     where: {
       OR: [
         {
@@ -166,7 +173,7 @@ export async function getUsersFollowingTimelinePaginated(
           AND: [
             {
               post: {
-                authorId: userId,
+                authorId: loggedInUserId,
               },
             },
             {
@@ -195,39 +202,26 @@ export async function getUsersFollowingTimelinePaginated(
     },
   });
 
-  const postIds = response.reduce((acc, item) => {
-    if (item.post) {
-      acc.push(item.post.id);
-
-      if (item.post.childPosts) {
-        acc.push(...item.post.childPosts.map((p) => p.id));
-      }
-    }
-    return acc;
-  }, [] as number[]);
-
+  const postIds = getPostIdsFromTimelineItems(timelineItems);
   const postsReactions = await getReactionCountsForPosts(postIds);
-
-  let userReactions: { [key: string]: Record<string, boolean> } | undefined =
-    undefined;
-
-  if (userId) {
-    userReactions = await getHasUserReactionsToPosts(postIds, userId);
+  let userReactions: Record<string, LoggedInUserReactions> = {};
+  if (loggedInUserId) {
+    userReactions = await getHasUserReactionsToPosts(postIds, loggedInUserId);
   }
 
-  return response.map((timelineItem) => {
-    const post = mapPostWithChildCreatedAtToReadable(timelineItem.post);
+  const timelineItemsWithReactions = mapTimelineItemsWithPostReactions(
+    timelineItems,
+    postsReactions,
+    userReactions
+  );
+
+  return timelineItemsWithReactions.map((timelineItem) => {
+    const postWithSortedChildren = mapPostSortChildPosts(timelineItem.post);
+    const post = mapPostWithChildCreatedAt(postWithSortedChildren);
     return {
       ...timelineItem,
       post: {
         ...post,
-        reactions: postsReactions[post.id],
-        userReactions: userReactions?.[post.id],
-        childPosts: post.childPosts.map((childPost) => ({
-          ...childPost,
-          reactions: postsReactions[childPost.id],
-          userReactions: userReactions?.[childPost.id],
-        })),
       },
     };
   });

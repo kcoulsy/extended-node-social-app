@@ -1,4 +1,5 @@
 import prisma from "../db";
+import { LoggedInUserReactions, ReactionCounts } from "../types";
 
 export async function createReaction({
   postId,
@@ -62,7 +63,9 @@ export async function deleteReaction({
   return null;
 }
 
-export async function getReactionCountsForPosts(postIds: number[]) {
+export async function getReactionCountsForPosts(
+  postIds: number[]
+): Promise<Record<string, ReactionCounts>> {
   const reactionCounts = await prisma.reaction.groupBy({
     by: ["postId", "type"],
     where: {
@@ -86,7 +89,9 @@ export async function getReactionCountsForPosts(postIds: number[]) {
   return counts;
 }
 
-export async function getReactionCountsForPost(postId: number) {
+export async function getReactionCountsForPost(
+  postId: number
+): Promise<ReactionCounts> {
   const reactionCounts = await prisma.reaction.groupBy({
     by: ["postId", "type"],
     where: {
@@ -110,7 +115,7 @@ export async function getReactionCountsForPost(postId: number) {
 export async function getHasUserReactionsToPost(
   postId: number,
   userId: number
-): Promise<{ [key: string]: boolean }> {
+): Promise<LoggedInUserReactions> {
   const reactions = await prisma.reaction.findMany({
     where: {
       postId,
@@ -129,7 +134,7 @@ export async function getHasUserReactionsToPost(
 export async function getHasUserReactionsToPosts(
   postIds: number[],
   userId: number
-): Promise<{ [key: string]: Record<string, boolean> }> {
+): Promise<Record<string, LoggedInUserReactions>> {
   const reactions = await prisma.reaction.findMany({
     where: {
       postId: {

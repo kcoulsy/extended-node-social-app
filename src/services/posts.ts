@@ -1,6 +1,7 @@
 import { Post, User } from "@prisma/client";
 import prisma from "../db";
-import { mapPostWithChildCreatedAtToReadable } from "../utils/mapPostWithChildCreatedAtToReadable";
+import { mapPostWithChildCreatedAt } from "../utils/mapPostWithChildCreatedAt";
+import { mapPostSortChildPosts } from "../utils/mapPostSortChildPosts";
 
 export type PostWithAuthorAndChildren = PostWithAuthor & {
   childPosts: PostWithAuthor[];
@@ -46,6 +47,6 @@ export async function createPost({
       },
     });
   }
-
-  return mapPostWithChildCreatedAtToReadable(post);
+  const postWithSortedChildren = mapPostSortChildPosts(post);
+  return mapPostWithChildCreatedAt(postWithSortedChildren);
 }

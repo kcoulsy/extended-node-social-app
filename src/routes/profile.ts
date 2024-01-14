@@ -1,6 +1,5 @@
 import { FastifyInstance, FastifyPluginOptions } from "fastify";
 import { getUserTimelinePaginated } from "../services/timeline";
-import { mapPostWithChildCreatedAtToReadable } from "../utils/mapPostWithChildCreatedAtToReadable";
 import prisma from "../db";
 
 export default function profileRouter(

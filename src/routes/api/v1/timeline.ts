@@ -4,9 +4,7 @@ import {
   getUserTimelinePaginated,
   getUsersFollowingTimelinePaginated,
 } from "../../../services/timeline";
-import { mapPostWithChildCreatedAtToReadable } from "../../../utils/mapPostWithChildCreatedAtToReadable";
 import prisma from "../../../db";
-import { getHasUserReactionsToPosts } from "../../../services/reaction";
 
 export default function timelineRouter(
   fastify: FastifyInstance,
