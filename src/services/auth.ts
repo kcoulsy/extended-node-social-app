@@ -8,6 +8,12 @@ interface CreateUser {
   password: string;
 }
 
+/**
+ * Creates a user if the username is not taken
+ *
+ * @param {CreateUser}
+ * @returns {User}
+ */
 export async function createUser({
   username,
   name,
@@ -37,17 +43,37 @@ export async function createUser({
   return user;
 }
 
-async function hashPassword(password: string) {
+/**
+ * Creates a hash from a password
+ *
+ * @param password string
+ * @returns
+ */
+export async function hashPassword(password: string) {
   const salt = await bcrypt.genSalt(10);
   const hash = await bcrypt.hash(password, salt);
   return hash;
 }
 
+/**
+ * Compares a password with a hashed password
+ *
+ * @param password string
+ * @param hashedPassword string
+ * @returns
+ */
 export async function verifyPassword(password: string, hashedPassword: string) {
   const isValid = await bcrypt.compare(password, hashedPassword);
   return isValid;
 }
 
+/**
+ * Logs in a user if the user exists and the password is correct
+ *
+ * @param username string
+ * @param password string
+ * @returns
+ */
 export async function login(username: string, password: string) {
   const user = await prisma.user.findUnique({
     where: {

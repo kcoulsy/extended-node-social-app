@@ -2,14 +2,14 @@ import { TimelineItemWithPostAndChildren } from "../services/timeline";
 import {
   LoggedInUserReactions,
   ReactionCounts,
-  TimelineItemWithPostAndChildrenWithReactions,
+  TimelineItemWithPostWithAuthorAndChildrenWithReactions,
 } from "../types";
 
 export function mapTimelineItemsWithPostReactions(
   timelineItems: TimelineItemWithPostAndChildren[],
   postsReactions: Record<string, ReactionCounts>,
   userReactions?: Record<string, LoggedInUserReactions>
-): TimelineItemWithPostAndChildrenWithReactions[] {
+): TimelineItemWithPostWithAuthorAndChildrenWithReactions[] {
   return timelineItems.map((timelineItem) => {
     return {
       ...timelineItem,

@@ -1,6 +1,8 @@
-import { PostWithAuthorAndChildren } from "../services/posts";
+import { PostWithAuthorAndChildrenWithReactions } from "../types";
 
-export function mapPostSortChildPosts(post: PostWithAuthorAndChildren) {
+export function mapPostSortChildPosts(
+  post: PostWithAuthorAndChildrenWithReactions
+): PostWithAuthorAndChildrenWithReactions {
   return {
     ...post,
     childPosts: post.childPosts.sort(

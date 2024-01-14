@@ -1,8 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { PostWithAuthor, PostWithAuthorAndChildren } from "../services/posts";
 import { mapPostWithChildCreatedAt } from "./mapPostWithChildCreatedAt";
+import { PostWithAuthorAndChildrenWithReactions } from "../types";
 
-const mockPost: PostWithAuthorAndChildren = {
+const mockPost: PostWithAuthorAndChildrenWithReactions = {
   id: 1,
   content: "content",
   createdAt: new Date(),
@@ -18,6 +18,7 @@ const mockPost: PostWithAuthorAndChildren = {
     name: "name",
     password: "password",
   },
+  reactions: {},
   childPosts: [
     {
       id: 1,
@@ -35,6 +36,7 @@ const mockPost: PostWithAuthorAndChildren = {
         name: "name",
         password: "password",
       },
+      reactions: {},
     },
   ],
 };

@@ -1,19 +1,12 @@
 import { intlFormatDistance } from "date-fns";
-import { PostWithAuthorAndChildren } from "../services/posts";
-
-type ChildPosts = PostWithAuthorAndChildren["childPosts"];
-
-export type PostWithAuthorAndChildrenCreatedAt = Omit<
-  PostWithAuthorAndChildren,
-  "createdAt" | "childPosts"
-> & {
-  createdAt: string;
-  childPosts: (Omit<ChildPosts[number], "createdAt"> & { createdAt: string })[];
-};
+import {
+  PostWithAuthorAndChildrenWithReactions,
+  PostWithAuthorAndChildrenWithReactionsCreatedAt,
+} from "../types";
 
 export function mapPostWithChildCreatedAt(
-  post: PostWithAuthorAndChildren
-): PostWithAuthorAndChildrenCreatedAt {
+  post: PostWithAuthorAndChildrenWithReactions
+): PostWithAuthorAndChildrenWithReactionsCreatedAt {
   return {
     ...post,
     createdAt: intlFormatDistance(post.createdAt, new Date()),

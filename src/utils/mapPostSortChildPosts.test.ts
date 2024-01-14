@@ -1,13 +1,13 @@
 import { describe, expect, it } from "vitest";
-import { PostWithAuthor, PostWithAuthorAndChildren } from "../services/posts";
-import { mapPostWithChildCreatedAt } from "./mapPostWithChildCreatedAt";
+
 import { mapPostSortChildPosts } from "./mapPostSortChildPosts";
+import { PostWithAuthorAndChildrenWithReactions } from "../types";
 
 const timeNow = Date.now();
 const timeOneHourAgo = timeNow - 1000 * 60 * 60;
 const timeOneDayAgo = timeNow - 1000 * 60 * 60 * 24;
 
-const mockPost: PostWithAuthorAndChildren = {
+const mockPost: PostWithAuthorAndChildrenWithReactions = {
   id: 1,
   content: "content",
   createdAt: new Date(),
@@ -23,6 +23,7 @@ const mockPost: PostWithAuthorAndChildren = {
     name: "name",
     password: "password",
   },
+  reactions: {},
   childPosts: [
     {
       id: 1,
@@ -40,6 +41,7 @@ const mockPost: PostWithAuthorAndChildren = {
         name: "name",
         password: "password",
       },
+      reactions: {},
     },
     {
       id: 2,
@@ -57,6 +59,7 @@ const mockPost: PostWithAuthorAndChildren = {
         name: "name",
         password: "password",
       },
+      reactions: {},
     },
     {
       id: 3,
@@ -74,6 +77,7 @@ const mockPost: PostWithAuthorAndChildren = {
         name: "name",
         password: "password",
       },
+      reactions: {},
     },
   ],
 };

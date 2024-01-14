@@ -8,10 +8,42 @@ export type PostWithAuthor = Post & {
   author: User;
 };
 
+export type PostWithAuthorAndReactions = PostWithAuthor & {
+  reactions: Record<string, number>;
+  userReactions?: LoggedInUserReactions;
+};
+
+export type PostWithAuthorAndChildrenWithReactions =
+  PostWithAuthorAndReactions & {
+    childPosts: PostWithAuthorAndReactions[];
+  };
+
+export type PostWithAuthorAndReactionsCreatedAt = Omit<
+  PostWithAuthorAndReactions,
+  "createdAt"
+> & { createdAt: string };
+
+export type PostWithAuthorAndChildrenWithReactionsCreatedAt =
+  PostWithAuthorAndReactionsCreatedAt & {
+    childPosts: PostWithAuthorAndReactionsCreatedAt[];
+  };
+
 export type TimelineItemWithPostAndChildren = TimelineItem & {
   author: User;
   post: PostWithAuthorAndChildren;
 };
+
+export type TimelineItemWithPostWithAuthorAndChildrenWithReactions =
+  TimelineItem & {
+    author: User;
+    post: PostWithAuthorAndChildrenWithReactions;
+  };
+
+export type TimelineItemWithPostAndChildrenWithReactionsCreatedAt =
+  TimelineItem & {
+    author: User;
+    post: PostWithAuthorAndChildrenWithReactionsCreatedAt;
+  };
 
 export interface LoggedInUserReactions {
   [key: string]: boolean;
@@ -20,23 +52,3 @@ export interface LoggedInUserReactions {
 export interface ReactionCounts {
   [key: string]: number;
 }
-
-export type TimelineItemWithPostAndChildrenWithReactions =
-  TimelineItemWithPostAndChildren & {
-    post: {
-      reactions: ReactionCounts;
-      userReactions?: LoggedInUserReactions;
-      childPosts: {
-        reactions: ReactionCounts;
-        userReactions?: LoggedInUserReactions;
-      }[];
-    };
-  };
-
-export type PostWithAuthorAndChildrenCreatedAt = Omit<
-  PostWithAuthorAndChildren,
-  "createdAt" | "childPosts"
-> & {
-  createdAt: string;
-  childPosts: (Omit<PostWithAuthor, "createdAt"> & { createdAt: string })[];
-};

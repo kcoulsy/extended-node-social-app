@@ -9,7 +9,10 @@ import {
 import { PostWithAuthorAndChildren } from "./posts";
 import { getPostIdsFromTimelineItems } from "../utils/getPostIdsFromTimelineItems";
 import { mapTimelineItemsWithPostReactions } from "../utils/mapTimelineItemsWithPostReactions";
-import { LoggedInUserReactions } from "../types";
+import {
+  LoggedInUserReactions,
+  TimelineItemWithPostAndChildrenWithReactionsCreatedAt,
+} from "../types";
 
 export type TimelineItemWithPostAndChildren = TimelineItem & {
   author: User;
@@ -26,7 +29,7 @@ export type TimelineItemWithPostAndChildren = TimelineItem & {
 export async function getAllTimelineItemsPaginated(
   cursor?: number,
   loggedInUserId?: number
-) {
+): Promise<TimelineItemWithPostAndChildrenWithReactionsCreatedAt[]> {
   const timelineItems = await prisma.timelineItem.findMany({
     take: 10,
     skip: cursor ? 1 : 0,
@@ -63,9 +66,7 @@ export async function getAllTimelineItemsPaginated(
     const post = mapPostWithChildCreatedAt(postWithSortedChildren);
     return {
       ...timelineItem,
-      post: {
-        ...post,
-      },
+      post,
     };
   });
 }

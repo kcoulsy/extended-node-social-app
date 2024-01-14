@@ -11,17 +11,27 @@ export type PostWithAuthor = Post & {
   author: User;
 };
 
+interface CreatePostInput {
+  content: string;
+  parentPostId?: string;
+  userId: number;
+  targetUserId?: number;
+}
+
+/**
+ * Creates a post and returns it with the author and child posts,
+ * where the child posts are sorted by createdAt date and
+ * the createdAt date is formatted to be human readable.
+ *
+ * @param {CreatePostInput}
+ * @returns {Promise<PostWithAuthorAndChildrenWithReactionsCreatedAt>}
+ */
 export async function createPost({
   content,
   parentPostId,
   userId,
   targetUserId,
-}: {
-  content: string;
-  parentPostId?: string;
-  userId: number;
-  targetUserId?: number;
-}) {
+}: CreatePostInput) {
   const post = await prisma.post.create({
     data: {
       content,
@@ -47,6 +57,14 @@ export async function createPost({
       },
     });
   }
-  const postWithSortedChildren = mapPostSortChildPosts(post);
+
+  const postWithSortedChildren = mapPostSortChildPosts({
+    ...post,
+    reactions: {},
+    childPosts: post.childPosts.map((childPost) => ({
+      ...childPost,
+      reactions: {},
+    })),
+  });
   return mapPostWithChildCreatedAt(postWithSortedChildren);
 }
