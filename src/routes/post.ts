@@ -1,14 +1,14 @@
-import { z } from "zod";
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { createPost } from "../services/posts";
+import { z } from 'zod';
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { createPost } from '../services/posts';
 
 export default function postRouter(
   fastify: FastifyInstance,
   options: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ) {
-  fastify.get("/", function (request, reply) {
-    reply.view("post");
+  fastify.get('/', (request, reply) => {
+    reply.view('post');
   });
 
   const postSchema = z.object({
@@ -16,12 +16,12 @@ export default function postRouter(
     parentPostId: z.string().optional(),
   });
 
-  fastify.post("/", async function (request, reply) {
+  fastify.post('/', async (request, reply) => {
     try {
       const { content, parentPostId } = postSchema.parse(request.body);
 
       if (!request.user) {
-        return reply.redirect("/auth/login");
+        return await reply.redirect('/auth/login');
       }
 
       await createPost({
@@ -30,10 +30,9 @@ export default function postRouter(
         userId: request.user.id,
       });
 
-      return reply.redirect("/");
+      return await reply.redirect('/');
     } catch (err) {
-      console.log(err);
-      return reply.redirect("/post");
+      return reply.redirect('/post');
     }
   });
 

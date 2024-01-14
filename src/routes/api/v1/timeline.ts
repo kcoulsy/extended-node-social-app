@@ -1,31 +1,31 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
 import {
   getAllTimelineItemsPaginated,
   getUserTimelinePaginated,
   getUsersFollowingTimelinePaginated,
-} from "../../../services/timeline";
-import prisma from "../../../db";
+} from '../../../services/timeline';
+import prisma from '../../../db';
 
 export default function timelineRouter(
   fastify: FastifyInstance,
   options: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ) {
   fastify.route<{
     Querystring: {
       cursor?: string;
     };
   }>({
-    method: "GET",
-    url: "/",
-    handler: async function (request, reply) {
+    method: 'GET',
+    url: '/',
+    async handler(request, reply) {
       const cursor = request.query?.cursor
-        ? parseInt(request.query.cursor)
+        ? parseInt(request.query.cursor, 10)
         : undefined;
 
       const timelineItems = await getAllTimelineItemsPaginated(
         cursor,
-        request.user?.id
+        request.user?.id,
       );
 
       return reply.send({
@@ -39,20 +39,20 @@ export default function timelineRouter(
       cursor?: string;
     };
   }>({
-    method: "GET",
-    url: "/following",
-    handler: async function (request, reply) {
+    method: 'GET',
+    url: '/following',
+    async handler(request, reply) {
       const cursor = request.query?.cursor
-        ? parseInt(request.query.cursor)
+        ? parseInt(request.query.cursor, 10)
         : undefined;
 
       if (!request.user) {
-        return reply.status(401).send({ message: "Unauthorized" });
+        return reply.status(401).send({ message: 'Unauthorized' });
       }
 
       const timelineItems = await getUsersFollowingTimelinePaginated(
         request.user?.id,
-        cursor
+        cursor,
       );
 
       return reply.send({
@@ -69,11 +69,11 @@ export default function timelineRouter(
       username: string;
     };
   }>({
-    method: "GET",
-    url: "/user/:username",
-    handler: async function (request, reply) {
+    method: 'GET',
+    url: '/user/:username',
+    async handler(request, reply) {
       const cursor = request.query?.cursor
-        ? parseInt(request.query.cursor)
+        ? parseInt(request.query.cursor, 10)
         : undefined;
 
       const user = await prisma.user.findUnique({
@@ -81,13 +81,13 @@ export default function timelineRouter(
       });
 
       if (!user) {
-        return reply.status(404).send({ message: "User not found" });
+        return reply.status(404).send({ message: 'User not found' });
       }
 
       const timelineItems = await getUserTimelinePaginated(
         user.id,
         cursor,
-        request.user?.id
+        request.user?.id,
       );
 
       return reply.send({

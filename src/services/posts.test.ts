@@ -1,12 +1,12 @@
-import { describe, expect, it } from "vitest";
-import { prismaMock } from "../test-mocks";
-import { createPost } from "./posts";
+import { describe, expect, it } from 'vitest';
+import { prismaMock } from '../test-mocks';
+import { createPost } from './posts';
 
-describe("Posts service", () => {
-  describe("createPost", () => {
-    it("should create a post", async () => {
+describe('Posts service', () => {
+  describe('createPost', () => {
+    it('should create a post', async () => {
       const data = {
-        content: "content",
+        content: 'content',
         userId: 1,
       };
 
@@ -18,11 +18,11 @@ describe("Posts service", () => {
         // @ts-expect-error
         author: {
           id: 1,
-          username: "username",
+          username: 'username',
           createdAt: new Date(),
           updatedAt: new Date(),
-          name: "name",
-          password: "password",
+          name: 'name',
+          password: 'password',
         },
         childPosts: [],
         id: 1,
@@ -39,24 +39,24 @@ describe("Posts service", () => {
         authorId: data.userId,
         author: {
           id: 1,
-          username: "username",
+          username: 'username',
           createdAt: expect.any(Date),
           updatedAt: expect.any(Date),
-          name: "name",
-          password: "password",
+          name: 'name',
+          password: 'password',
         },
         childPosts: [],
         id: 1,
-        createdAt: "now",
+        createdAt: 'now',
         updatedAt: expect.any(Date),
         reactions: {},
       });
     });
   });
 
-  it("should create a post with target user", async () => {
+  it('should create a post with target user', async () => {
     const data = {
-      content: "content",
+      content: 'content',
       userId: 1,
       targetUserId: 2,
     };
@@ -69,11 +69,11 @@ describe("Posts service", () => {
       // @ts-expect-error
       author: {
         id: 1,
-        username: "username",
+        username: 'username',
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "name",
-        password: "password",
+        name: 'name',
+        password: 'password',
       },
       childPosts: [],
       id: 1,
@@ -90,23 +90,23 @@ describe("Posts service", () => {
       authorId: data.userId,
       author: {
         id: 1,
-        username: "username",
+        username: 'username',
         createdAt: expect.any(Date),
         updatedAt: expect.any(Date),
-        name: "name",
-        password: "password",
+        name: 'name',
+        password: 'password',
       },
       childPosts: [],
       id: 1,
-      createdAt: "now",
+      createdAt: 'now',
       updatedAt: expect.any(Date),
       reactions: {},
     });
   });
 
-  it("should create a timeline item if no parent post id is provided", async () => {
+  it('should create a timeline item if no parent post id is provided', async () => {
     const data = {
-      content: "content",
+      content: 'content',
       userId: 1,
     };
 
@@ -118,11 +118,11 @@ describe("Posts service", () => {
       // @ts-expect-error
       author: {
         id: 1,
-        username: "username",
+        username: 'username',
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "name",
-        password: "password",
+        name: 'name',
+        password: 'password',
       },
       childPosts: [],
       id: 1,
@@ -140,9 +140,9 @@ describe("Posts service", () => {
     });
   });
 
-  it("should create a timeline item for the the target user if a parent post id is not provided", async () => {
+  it('should create a timeline item for the the target user if a parent post id is not provided', async () => {
     const data = {
-      content: "content",
+      content: 'content',
       userId: 1,
       targetUserId: 2,
     };
@@ -155,11 +155,11 @@ describe("Posts service", () => {
       // @ts-expect-error
       author: {
         id: 1,
-        username: "username",
+        username: 'username',
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "name",
-        password: "password",
+        name: 'name',
+        password: 'password',
       },
       childPosts: [],
       id: 1,
@@ -177,11 +177,11 @@ describe("Posts service", () => {
     });
   });
 
-  it("should not create a timeline item if a parent post id is provided", async () => {
+  it('should not create a timeline item if a parent post id is provided', async () => {
     const data = {
-      content: "content",
+      content: 'content',
       userId: 1,
-      parentPostId: "2",
+      parentPostId: '2',
     };
 
     prismaMock.post.create.mockResolvedValueOnce({
@@ -192,11 +192,11 @@ describe("Posts service", () => {
       // @ts-expect-error
       author: {
         id: 1,
-        username: "username",
+        username: 'username',
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "name",
-        password: "password",
+        name: 'name',
+        password: 'password',
       },
       childPosts: [],
       id: 1,

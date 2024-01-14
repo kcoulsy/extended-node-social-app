@@ -1,19 +1,19 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { getUserTimelinePaginated } from "../services/timeline";
-import prisma from "../db";
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { getUserTimelinePaginated } from '../services/timeline';
+import prisma from '../db';
 
 export default function profileRouter(
   fastify: FastifyInstance,
   options: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ) {
   fastify.get<{
     Params: {
       username: string;
     };
-  }>("/:username", async function (request, reply) {
+  }>('/:username', async (request, reply) => {
     if (!request.params.username) {
-      return reply.redirect("/");
+      return reply.redirect('/');
     }
 
     const user = await prisma.user.findUnique({
@@ -26,21 +26,21 @@ export default function profileRouter(
     });
 
     if (!user) {
-      return reply.redirect("/");
+      return reply.redirect('/');
     }
 
     const timelineItems = await getUserTimelinePaginated(
       user.id,
       undefined,
-      request.user?.id
+      request.user?.id,
     );
 
     const isFollowedByLoggedInuser = user.followedBy.some(
-      (follower) => follower.id === request.user?.id
+      (follower) => follower.id === request.user?.id,
     );
 
-    return reply.view("profile", {
-      timelineItems: timelineItems,
+    return reply.view('profile', {
+      timelineItems,
       profileUser: user,
       isFollowedByLoggedInuser,
     });

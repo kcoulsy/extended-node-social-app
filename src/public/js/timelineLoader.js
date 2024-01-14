@@ -1,43 +1,42 @@
-import { bindCreateCommentForms } from "./createComment.js";
-import { createPostHTML } from "./createPostHTML.js";
-import { bindReactionHandler } from "./reaction.js";
+import { bindCreateCommentForms } from './createComment.js';
+import { createPostHTML } from './createPostHTML.js';
+import { bindReactionHandler } from './reaction.js';
 
 export function initTimelineLoader(
-  container = "",
-  apiRoute = "/api/v1/timeline"
+  container = '',
+  apiRoute = '/api/v1/timeline',
 ) {
-  console.log("initing observer");
   bindCreateCommentForms();
   bindReactionHandler();
 
   const allInitialPosts = document.querySelectorAll(
-    `${container} .posts__item`
+    `${container} .posts__item`,
   );
   const loadedTimelineItemIds = [...allInitialPosts].map(
-    (post) => post.dataset.timelineItemId
+    (post) => post.dataset.timelineItemId,
   );
 
-  if (!!window.IntersectionObserver) {
+  if (window.IntersectionObserver) {
     const observer = new IntersectionObserver(async (entries) => {
       const entry = entries[0];
 
       if (entry.isIntersecting) {
         const lastTimelineItem = document.querySelector(
-          `${container} .posts__item:last-child`
+          `${container} .posts__item:last-child`,
         );
 
         const lastPostId = lastTimelineItem.dataset.timelineItemId;
 
         const res = await fetch(
           `${window.location.origin}${apiRoute}?cursor=${lastPostId}`,
-          {}
+          {},
         );
 
         const { timelineItems } = await res.json();
 
         const filteredTimelineItems = timelineItems.filter(
           (timelineItem) =>
-            !loadedTimelineItemIds.includes(`${timelineItem.id}`)
+            !loadedTimelineItemIds.includes(`${timelineItem.id}`),
         );
 
         filteredTimelineItems.forEach((timelineItem) => {
@@ -46,13 +45,13 @@ export function initTimelineLoader(
 
         const html = filteredTimelineItems
           .map((timelineItem) =>
-            createPostHTML(timelineItem.post, `${timelineItem.id}`)
+            createPostHTML(timelineItem.post, `${timelineItem.id}`),
           )
-          .join("");
+          .join('');
 
         document
           .querySelector(`${container} .posts`)
-          .insertAdjacentHTML("beforeend", html);
+          .insertAdjacentHTML('beforeend', html);
 
         bindCreateCommentForms();
         bindReactionHandler();
@@ -61,7 +60,7 @@ export function initTimelineLoader(
 
         if (filteredTimelineItems.length >= 10) {
           observer.observe(
-            document.querySelector(`${container} .posts__item:last-child`)
+            document.querySelector(`${container} .posts__item:last-child`),
           );
         }
       }
@@ -69,14 +68,11 @@ export function initTimelineLoader(
 
     if (loadedTimelineItemIds.length >= 10) {
       observer.observe(
-        document.querySelector(`${container} .posts__item:last-child`)
+        document.querySelector(`${container} .posts__item:last-child`),
       );
     }
 
-    return () => {
-      console.log("disconnecting observer");
-      return observer.disconnect();
-    };
+    return () => observer.disconnect();
   }
 
   return () => {};

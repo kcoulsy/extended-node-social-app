@@ -1,4 +1,4 @@
-import { Post, TimelineItem, User } from "@prisma/client";
+import { Post, TimelineItem, User } from '@prisma/client';
 
 export type PostWithAuthorAndChildren = PostWithAuthor & {
   childPosts: PostWithAuthor[];
@@ -20,7 +20,7 @@ export type PostWithAuthorAndChildrenWithReactions =
 
 export type PostWithAuthorAndReactionsCreatedAt = Omit<
   PostWithAuthorAndReactions,
-  "createdAt"
+  'createdAt'
 > & { createdAt: string };
 
 export type PostWithAuthorAndChildrenWithReactionsCreatedAt =

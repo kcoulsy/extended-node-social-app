@@ -1,10 +1,10 @@
-import prisma from "../db";
-import { LoggedInUserReactions, ReactionCounts } from "../types";
+import prisma from '../db';
+import { LoggedInUserReactions, ReactionCounts } from '../types';
 
 interface CreateReactionInput {
   postId: number;
   authorId: number;
-  type: "like" | "smile" | "star" | "heart";
+  type: 'like' | 'smile' | 'star' | 'heart';
 }
 
 /**
@@ -55,7 +55,7 @@ export async function deleteReaction({
 }: {
   postId: number;
   authorId: number;
-  type: "like" | "smile" | "star" | "heart";
+  type: 'like' | 'smile' | 'star' | 'heart';
 }) {
   const reaction = await prisma.reaction.findFirst({
     where: {
@@ -85,10 +85,10 @@ export async function deleteReaction({
  * @returns {Promise<Record<string, ReactionCounts>>}
  */
 export async function getReactionCountsForPosts(
-  postIds: number[]
+  postIds: number[],
 ): Promise<Record<string, ReactionCounts>> {
   const reactionCounts = await prisma.reaction.groupBy({
-    by: ["postId", "type"],
+    by: ['postId', 'type'],
     where: {
       postId: {
         in: postIds,
@@ -99,11 +99,14 @@ export async function getReactionCountsForPosts(
     },
   });
 
-  const counts = reactionCounts.reduce((acc, curr) => {
-    acc[curr.postId] = acc[curr.postId] || {};
-    acc[curr.postId][curr.type] = curr._count.type;
-    return acc;
-  }, {} as Record<string, Record<string, number>>);
+  const counts = reactionCounts.reduce(
+    (acc, curr) => {
+      acc[curr.postId] = acc[curr.postId] || {};
+      acc[curr.postId][curr.type] = curr._count.type;
+      return acc;
+    },
+    {} as Record<string, Record<string, number>>,
+  );
 
   return counts;
 }
@@ -115,10 +118,10 @@ export async function getReactionCountsForPosts(
  * @returns {Promise<ReactionCounts>}
  */
 export async function getReactionCountsForPost(
-  postId: number
+  postId: number,
 ): Promise<ReactionCounts> {
   const reactionCounts = await prisma.reaction.groupBy({
-    by: ["postId", "type"],
+    by: ['postId', 'type'],
     where: {
       postId,
     },
@@ -127,24 +130,27 @@ export async function getReactionCountsForPost(
     },
   });
 
-  const counts = reactionCounts.reduce((acc, curr) => {
-    acc[curr.type] = curr._count.type;
-    return acc;
-  }, {} as Record<string, number>);
+  const counts = reactionCounts.reduce(
+    (acc, curr) => {
+      acc[curr.type] = curr._count.type;
+      return acc;
+    },
+    {} as Record<string, number>,
+  );
 
   return counts;
 }
 
 /**
  * Gets whether the logged in user has reactions to a list of posts
- 
+
  * @param postId number; the id of the post to get the reaction counts for
  * @param userId number; the id of the user to get the reactions for
  * @returns {Promise<LoggedInUserReactions>}
  */
 export async function getHasUserReactionsToPost(
   postId: number,
-  userId: number
+  userId: number,
 ): Promise<LoggedInUserReactions> {
   const reactions = await prisma.reaction.findMany({
     where: {
@@ -153,10 +159,13 @@ export async function getHasUserReactionsToPost(
     },
   });
 
-  const hasReactions = reactions.reduce((acc, curr) => {
-    acc[curr.type] = true;
-    return acc;
-  }, {} as Record<string, boolean>);
+  const hasReactions = reactions.reduce(
+    (acc, curr) => {
+      acc[curr.type] = true;
+      return acc;
+    },
+    {} as Record<string, boolean>,
+  );
 
   return hasReactions;
 }
@@ -170,7 +179,7 @@ export async function getHasUserReactionsToPost(
  */
 export async function getHasUserReactionsToPosts(
   postIds: number[],
-  userId: number
+  userId: number,
 ): Promise<Record<string, LoggedInUserReactions>> {
   const reactions = await prisma.reaction.findMany({
     where: {
@@ -181,11 +190,14 @@ export async function getHasUserReactionsToPosts(
     },
   });
 
-  const hasReactions = reactions.reduce((acc, curr) => {
-    acc[curr.postId] = acc[curr.postId] || {};
-    acc[curr.postId][curr.type] = true;
-    return acc;
-  }, {} as Record<string, Record<string, boolean>>);
+  const hasReactions = reactions.reduce(
+    (acc, curr) => {
+      acc[curr.postId] = acc[curr.postId] || {};
+      acc[curr.postId][curr.type] = true;
+      return acc;
+    },
+    {} as Record<string, Record<string, boolean>>,
+  );
 
   return hasReactions;
 }

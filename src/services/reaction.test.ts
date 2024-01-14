@@ -1,21 +1,21 @@
-import { describe } from "node:test";
-import { expect, it } from "vitest";
+import { describe } from 'node:test';
+import { expect, it } from 'vitest';
 import {
   createReaction,
   deleteReaction,
   getHasUserReactionsToPost,
   getHasUserReactionsToPosts,
   getReactionCountsForPosts,
-} from "./reaction";
-import { prismaMock } from "../test-mocks";
+} from './reaction';
+import { prismaMock } from '../test-mocks';
 
-describe("Reaction service", () => {
-  describe("createReaction", () => {
-    it("should create a reaction", async () => {
+describe('Reaction service', () => {
+  describe('createReaction', () => {
+    it('should create a reaction', async () => {
       const data = {
         postId: 1,
         authorId: 1,
-        type: "like",
+        type: 'like',
       } as const;
 
       prismaMock.reaction.findFirst.mockResolvedValueOnce(null);
@@ -37,11 +37,11 @@ describe("Reaction service", () => {
       });
     });
 
-    it("should return existing reaction if it exists", async () => {
+    it('should return existing reaction if it exists', async () => {
       const data = {
         postId: 1,
         authorId: 1,
-        type: "like",
+        type: 'like',
       } as const;
 
       prismaMock.reaction.findFirst.mockResolvedValueOnce({
@@ -64,12 +64,12 @@ describe("Reaction service", () => {
     });
   });
 
-  describe("deleteReaction", () => {
-    it("should delete a reaction", async () => {
+  describe('deleteReaction', () => {
+    it('should delete a reaction', async () => {
       const data = {
         postId: 1,
         authorId: 1,
-        type: "like",
+        type: 'like',
       } as const;
 
       prismaMock.reaction.findFirst.mockResolvedValueOnce({
@@ -90,11 +90,11 @@ describe("Reaction service", () => {
       });
     });
 
-    it("should return null if reaction does not exist", async () => {
+    it('should return null if reaction does not exist', async () => {
       const data = {
         postId: 1,
         authorId: 1,
-        type: "like",
+        type: 'like',
       } as const;
 
       prismaMock.reaction.findFirst.mockResolvedValueOnce(null);
@@ -107,8 +107,8 @@ describe("Reaction service", () => {
     });
   });
 
-  describe("getReactionCountsForPosts", () => {
-    it("should return reaction counts for posts", async () => {
+  describe('getReactionCountsForPosts', () => {
+    it('should return reaction counts for posts', async () => {
       const postIds = [1, 2];
 
       // @ts-expect-error
@@ -116,7 +116,7 @@ describe("Reaction service", () => {
         {
           postId: 1,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -124,7 +124,7 @@ describe("Reaction service", () => {
         {
           postId: 1,
           authorId: 3,
-          type: "smile",
+          type: 'smile',
           _count: {
             type: 1,
           },
@@ -132,7 +132,7 @@ describe("Reaction service", () => {
         {
           postId: 2,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -140,7 +140,7 @@ describe("Reaction service", () => {
         {
           postId: 2,
           authorId: 3,
-          type: "smile",
+          type: 'smile',
           _count: {
             type: 1,
           },
@@ -161,7 +161,7 @@ describe("Reaction service", () => {
       });
     });
 
-    it("should return empty object if no reaction counts", async () => {
+    it('should return empty object if no reaction counts', async () => {
       const postIds = [1, 2];
 
       // @ts-expect-error
@@ -173,8 +173,8 @@ describe("Reaction service", () => {
     });
   });
 
-  describe("getReactionCountsForPost", () => {
-    it("should return reaction counts for post", async () => {
+  describe('getReactionCountsForPost', () => {
+    it('should return reaction counts for post', async () => {
       const postId = 1;
 
       // @ts-expect-error
@@ -182,7 +182,7 @@ describe("Reaction service", () => {
         {
           postId: 1,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -190,7 +190,7 @@ describe("Reaction service", () => {
         {
           postId: 1,
           authorId: 3,
-          type: "smile",
+          type: 'smile',
           _count: {
             type: 1,
           },
@@ -207,7 +207,7 @@ describe("Reaction service", () => {
       });
     });
 
-    it("should return empty object if no reaction counts", async () => {
+    it('should return empty object if no reaction counts', async () => {
       const postId = 1;
 
       // @ts-expect-error
@@ -219,8 +219,8 @@ describe("Reaction service", () => {
     });
   });
 
-  describe("getHasUserReactionsToPost", () => {
-    it("should return object with true values if user has reactions to post", async () => {
+  describe('getHasUserReactionsToPost', () => {
+    it('should return object with true values if user has reactions to post', async () => {
       const postId = 1;
       const userId = 1;
 
@@ -229,7 +229,7 @@ describe("Reaction service", () => {
           id: 1,
           postId,
           authorId: userId,
-          type: "like",
+          type: 'like',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -242,7 +242,7 @@ describe("Reaction service", () => {
       });
     });
 
-    it("should return empty object if user has no reactions to post", async () => {
+    it('should return empty object if user has no reactions to post', async () => {
       const postId = 1;
       const userId = 1;
 
@@ -254,8 +254,8 @@ describe("Reaction service", () => {
     });
   });
 
-  describe("getHasUserReactionsToPosts", () => {
-    it("should return object with true values if user has reactions to posts", async () => {
+  describe('getHasUserReactionsToPosts', () => {
+    it('should return object with true values if user has reactions to posts', async () => {
       const postIds = [1, 2];
       const userId = 1;
 
@@ -264,7 +264,7 @@ describe("Reaction service", () => {
           id: 1,
           postId: postIds[0],
           authorId: userId,
-          type: "like",
+          type: 'like',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -272,7 +272,7 @@ describe("Reaction service", () => {
           id: 2,
           postId: postIds[1],
           authorId: userId,
-          type: "like",
+          type: 'like',
           createdAt: new Date(),
           updatedAt: new Date(),
         },
@@ -290,7 +290,7 @@ describe("Reaction service", () => {
       });
     });
 
-    it("should return empty object if user has no reactions to posts", async () => {
+    it('should return empty object if user has no reactions to posts', async () => {
       const postIds = [1, 2];
       const userId = 1;
 

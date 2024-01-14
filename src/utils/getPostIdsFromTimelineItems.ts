@@ -1,7 +1,7 @@
-import { TimelineItemWithPostAndChildren } from "../services/timeline";
+import { TimelineItemWithPostAndChildren } from '../types';
 
 export function getPostIdsFromTimelineItems(
-  timelineItems: TimelineItemWithPostAndChildren[]
+  timelineItems: TimelineItemWithPostAndChildren[],
 ): number[] {
   return timelineItems.reduce((acc, item) => {
     if (item.post) {

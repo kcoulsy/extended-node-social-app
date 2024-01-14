@@ -1,11 +1,11 @@
-import { intlFormatDistance } from "date-fns";
+import { intlFormatDistance } from 'date-fns';
 import {
   PostWithAuthorAndChildrenWithReactions,
   PostWithAuthorAndChildrenWithReactionsCreatedAt,
-} from "../types";
+} from '../types';
 
 export function mapPostWithChildCreatedAt(
-  post: PostWithAuthorAndChildrenWithReactions
+  post: PostWithAuthorAndChildrenWithReactions,
 ): PostWithAuthorAndChildrenWithReactionsCreatedAt {
   return {
     ...post,

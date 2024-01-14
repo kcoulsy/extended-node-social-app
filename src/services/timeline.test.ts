@@ -1,18 +1,17 @@
-import { describe, expect, it } from "vitest";
-import { prismaMock } from "../test-mocks";
+import { describe, expect, it } from 'vitest';
+import { prismaMock } from '../test-mocks';
 import {
   getAllTimelineItemsPaginated,
   getUserTimelinePaginated,
   getUsersFollowingTimelinePaginated,
-} from "./timeline";
-import { beforeEach } from "node:test";
+} from './timeline';
 
 const oneHourAgo = Date.now() - 1000 * 60 * 60;
 const twoHoursAgo = Date.now() - 1000 * 60 * 60 * 2;
 
-describe("timeline service", () => {
-  describe("getAllTimelineItemsPaginated", () => {
-    it("should return timeline items with readable createdAts", async () => {
+describe('timeline service', () => {
+  describe('getAllTimelineItemsPaginated', () => {
+    it('should return timeline items with readable createdAts', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -22,15 +21,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -39,7 +38,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 1,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -56,11 +55,11 @@ describe("timeline service", () => {
 
       const result = await getAllTimelineItemsPaginated();
 
-      expect(result[0].post.createdAt).toBe("1 hour ago");
-      expect(result[0].post.childPosts[0].createdAt).toBe("now");
+      expect(result[0].post.createdAt).toBe('1 hour ago');
+      expect(result[0].post.childPosts[0].createdAt).toBe('now');
     });
 
-    it("should return reaction counts for posts and childPosts", async () => {
+    it('should return reaction counts for posts and childPosts', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -70,15 +69,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -87,7 +86,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 2,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -104,7 +103,7 @@ describe("timeline service", () => {
         {
           postId: 1,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -112,7 +111,7 @@ describe("timeline service", () => {
         {
           postId: 1,
           authorId: 3,
-          type: "smile",
+          type: 'smile',
           _count: {
             type: 1,
           },
@@ -120,7 +119,7 @@ describe("timeline service", () => {
         {
           postId: 2,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -128,7 +127,7 @@ describe("timeline service", () => {
         {
           postId: 2,
           authorId: 3,
-          type: "heart",
+          type: 'heart',
           _count: {
             type: 1,
           },
@@ -148,7 +147,7 @@ describe("timeline service", () => {
       });
     });
 
-    it("should sort childPosts by createdAt", async () => {
+    it('should sort childPosts by createdAt', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -158,15 +157,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -175,7 +174,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 10,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -184,7 +183,7 @@ describe("timeline service", () => {
               },
               {
                 id: 20,
-                content: "child post 2",
+                content: 'child post 2',
                 createdAt: new Date(twoHoursAgo),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -193,7 +192,7 @@ describe("timeline service", () => {
               },
               {
                 id: 30,
-                content: "child post 3",
+                content: 'child post 3',
                 createdAt: new Date(oneHourAgo),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -215,7 +214,7 @@ describe("timeline service", () => {
       expect(result[0].post.childPosts[2].id).toBe(20);
     });
 
-    it("should sort posts by createdAt", async () => {
+    it('should sort posts by createdAt', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -225,15 +224,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -250,15 +249,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(),
             updatedAt: new Date(),
             authorId: 1,
@@ -275,15 +274,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(twoHoursAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -305,8 +304,8 @@ describe("timeline service", () => {
     });
   });
 
-  describe("getUserTimelinePaginated", () => {
-    it("should return timeline items with readable createdAts", async () => {
+  describe('getUserTimelinePaginated', () => {
+    it('should return timeline items with readable createdAts', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -316,15 +315,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -333,7 +332,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 1,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -352,11 +351,11 @@ describe("timeline service", () => {
 
       const result = await getUserTimelinePaginated(userId);
 
-      expect(result[0].post.createdAt).toBe("1 hour ago");
-      expect(result[0].post.childPosts[0].createdAt).toBe("now");
+      expect(result[0].post.createdAt).toBe('1 hour ago');
+      expect(result[0].post.childPosts[0].createdAt).toBe('now');
     });
 
-    it("should return reaction counts for posts and childPosts", async () => {
+    it('should return reaction counts for posts and childPosts', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -366,15 +365,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -383,7 +382,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 2,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -400,7 +399,7 @@ describe("timeline service", () => {
         {
           postId: 1,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -408,7 +407,7 @@ describe("timeline service", () => {
         {
           postId: 1,
           authorId: 3,
-          type: "smile",
+          type: 'smile',
           _count: {
             type: 1,
           },
@@ -416,7 +415,7 @@ describe("timeline service", () => {
         {
           postId: 2,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -424,7 +423,7 @@ describe("timeline service", () => {
         {
           postId: 2,
           authorId: 3,
-          type: "heart",
+          type: 'heart',
           _count: {
             type: 1,
           },
@@ -446,7 +445,7 @@ describe("timeline service", () => {
       });
     });
 
-    it("should sort childPosts by createdAt", async () => {
+    it('should sort childPosts by createdAt', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -456,15 +455,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -473,7 +472,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 10,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -482,7 +481,7 @@ describe("timeline service", () => {
               },
               {
                 id: 20,
-                content: "child post 2",
+                content: 'child post 2',
                 createdAt: new Date(twoHoursAgo),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -491,7 +490,7 @@ describe("timeline service", () => {
               },
               {
                 id: 30,
-                content: "child post 3",
+                content: 'child post 3',
                 createdAt: new Date(oneHourAgo),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -515,7 +514,7 @@ describe("timeline service", () => {
       expect(result[0].post.childPosts[2].id).toBe(20);
     });
 
-    it("should sort posts by createdAt", async () => {
+    it('should sort posts by createdAt', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -525,15 +524,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -550,15 +549,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(),
             updatedAt: new Date(),
             authorId: 1,
@@ -575,15 +574,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(twoHoursAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -607,8 +606,8 @@ describe("timeline service", () => {
     });
   });
 
-  describe("getUsersFollowingTimelinePaginated", () => {
-    it("should return timeline items with readable createdAts", async () => {
+  describe('getUsersFollowingTimelinePaginated', () => {
+    it('should return timeline items with readable createdAts', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -618,15 +617,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -635,7 +634,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 1,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -656,11 +655,11 @@ describe("timeline service", () => {
 
       const result = await getUsersFollowingTimelinePaginated(userId);
 
-      expect(result[0].post.createdAt).toBe("1 hour ago");
-      expect(result[0].post.childPosts[0].createdAt).toBe("now");
+      expect(result[0].post.createdAt).toBe('1 hour ago');
+      expect(result[0].post.childPosts[0].createdAt).toBe('now');
     });
 
-    it("should return reaction counts for posts and childPosts", async () => {
+    it('should return reaction counts for posts and childPosts', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -670,15 +669,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -687,7 +686,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 2,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -704,7 +703,7 @@ describe("timeline service", () => {
         {
           postId: 1,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -712,7 +711,7 @@ describe("timeline service", () => {
         {
           postId: 1,
           authorId: 3,
-          type: "smile",
+          type: 'smile',
           _count: {
             type: 1,
           },
@@ -720,7 +719,7 @@ describe("timeline service", () => {
         {
           postId: 2,
           authorId: 1,
-          type: "like",
+          type: 'like',
           _count: {
             type: 2,
           },
@@ -728,7 +727,7 @@ describe("timeline service", () => {
         {
           postId: 2,
           authorId: 3,
-          type: "heart",
+          type: 'heart',
           _count: {
             type: 1,
           },
@@ -752,7 +751,7 @@ describe("timeline service", () => {
       });
     });
 
-    it("should sort childPosts by createdAt", async () => {
+    it('should sort childPosts by createdAt', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -762,15 +761,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -779,7 +778,7 @@ describe("timeline service", () => {
             childPosts: [
               {
                 id: 10,
-                content: "child post",
+                content: 'child post',
                 createdAt: new Date(),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -788,7 +787,7 @@ describe("timeline service", () => {
               },
               {
                 id: 20,
-                content: "child post 2",
+                content: 'child post 2',
                 createdAt: new Date(twoHoursAgo),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -797,7 +796,7 @@ describe("timeline service", () => {
               },
               {
                 id: 30,
-                content: "child post 3",
+                content: 'child post 3',
                 createdAt: new Date(oneHourAgo),
                 updatedAt: new Date(),
                 authorId: 1,
@@ -823,7 +822,7 @@ describe("timeline service", () => {
       expect(result[0].post.childPosts[2].id).toBe(20);
     });
 
-    it("should sort posts by createdAt", async () => {
+    it('should sort posts by createdAt', async () => {
       prismaMock.timelineItem.findMany.mockResolvedValueOnce([
         {
           id: 1,
@@ -833,15 +832,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(oneHourAgo),
             updatedAt: new Date(),
             authorId: 1,
@@ -858,15 +857,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(),
             updatedAt: new Date(),
             authorId: 1,
@@ -883,15 +882,15 @@ describe("timeline service", () => {
           // @ts-expect-error
           author: {
             id: 1,
-            username: "username",
+            username: 'username',
             createdAt: new Date(),
             updatedAt: new Date(),
-            name: "name",
-            password: "password",
+            name: 'name',
+            password: 'password',
           },
           post: {
             id: 1,
-            content: "content",
+            content: 'content',
             createdAt: new Date(twoHoursAgo),
             updatedAt: new Date(),
             authorId: 1,

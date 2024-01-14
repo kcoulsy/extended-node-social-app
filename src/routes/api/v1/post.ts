@@ -1,11 +1,11 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { createPost } from "../../../services/posts";
-import prisma from "../../../db";
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import { createPost } from '../../../services/posts';
+import prisma from '../../../db';
 
 export default function postRouter(
   fastify: FastifyInstance,
   options: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ) {
   fastify.route<{
     Body: {
@@ -14,13 +14,13 @@ export default function postRouter(
       targetUsername?: string;
     };
   }>({
-    method: "POST",
-    url: "/",
-    handler: async function (request, reply) {
+    method: 'POST',
+    url: '/',
+    async handler(request, reply) {
       const { content, parentPostId } = request.body;
 
       if (!request.user) {
-        return reply.redirect("/auth/login");
+        return reply.redirect('/auth/login');
       }
 
       let targetUserId: number | undefined;
@@ -63,14 +63,14 @@ export default function postRouter(
       postId: string;
     };
   }>({
-    method: "POST",
-    url: "/:postId/comment",
-    handler: async function (request, reply) {
+    method: 'POST',
+    url: '/:postId/comment',
+    async handler(request, reply) {
       const { content } = request.body;
       const { postId } = request.params;
 
       if (!request.user) {
-        return reply.redirect("/auth/login");
+        return reply.redirect('/auth/login');
       }
 
       const post = await createPost({

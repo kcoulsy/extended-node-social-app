@@ -1,7 +1,8 @@
-import { defineConfig } from "vitest/config";
+/* eslint-disable import/no-extraneous-dependencies */
+import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   test: {
-    setupFiles: ["./src/test-mocks.ts"],
+    setupFiles: ['./src/test-mocks.ts'],
   },
 });

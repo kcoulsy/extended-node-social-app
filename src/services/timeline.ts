@@ -1,18 +1,18 @@
-import { TimelineItem, User } from "@prisma/client";
-import prisma from "../db";
-import { mapPostSortChildPosts } from "../utils/mapPostSortChildPosts";
-import { mapPostWithChildCreatedAt } from "../utils/mapPostWithChildCreatedAt";
+import { TimelineItem, User } from '@prisma/client';
+import prisma from '../db';
+import { mapPostSortChildPosts } from '../utils/mapPostSortChildPosts';
+import { mapPostWithChildCreatedAt } from '../utils/mapPostWithChildCreatedAt';
 import {
   getHasUserReactionsToPosts,
   getReactionCountsForPosts,
-} from "./reaction";
-import { PostWithAuthorAndChildren } from "./posts";
-import { getPostIdsFromTimelineItems } from "../utils/getPostIdsFromTimelineItems";
-import { mapTimelineItemsWithPostReactions } from "../utils/mapTimelineItemsWithPostReactions";
+} from './reaction';
+import { PostWithAuthorAndChildren } from './posts';
+import { getPostIdsFromTimelineItems } from '../utils/getPostIdsFromTimelineItems';
+import { mapTimelineItemsWithPostReactions } from '../utils/mapTimelineItemsWithPostReactions';
 import {
   LoggedInUserReactions,
   TimelineItemWithPostAndChildrenWithReactionsCreatedAt,
-} from "../types";
+} from '../types';
 
 export type TimelineItemWithPostAndChildren = TimelineItem & {
   author: User;
@@ -28,13 +28,13 @@ export type TimelineItemWithPostAndChildren = TimelineItem & {
  */
 export async function getAllTimelineItemsPaginated(
   cursor?: number,
-  loggedInUserId?: number
+  loggedInUserId?: number,
 ): Promise<TimelineItemWithPostAndChildrenWithReactionsCreatedAt[]> {
   const timelineItems = await prisma.timelineItem.findMany({
     take: 10,
     skip: cursor ? 1 : 0,
     cursor: cursor ? { id: cursor } : undefined,
-    orderBy: { id: "desc" },
+    orderBy: { id: 'desc' },
     include: {
       author: true,
       post: {
@@ -58,7 +58,7 @@ export async function getAllTimelineItemsPaginated(
   const timelineItemsWithReactions = mapTimelineItemsWithPostReactions(
     timelineItems,
     postsReactions,
-    userReactions
+    userReactions,
   );
 
   return timelineItemsWithReactions.map((timelineItem) => {
@@ -82,7 +82,7 @@ export async function getAllTimelineItemsPaginated(
 export async function getUserTimelinePaginated(
   userId: number,
   cursor?: number,
-  loggedInUserId?: number
+  loggedInUserId?: number,
 ) {
   const timelineItems = await prisma.timelineItem.findMany({
     where: {
@@ -109,7 +109,7 @@ export async function getUserTimelinePaginated(
     take: 10,
     skip: cursor ? 1 : 0,
     cursor: cursor ? { id: cursor } : undefined,
-    orderBy: { id: "desc" },
+    orderBy: { id: 'desc' },
     include: {
       author: true,
       post: {
@@ -133,7 +133,7 @@ export async function getUserTimelinePaginated(
   const timelineItemsWithReactions = mapTimelineItemsWithPostReactions(
     timelineItems,
     postsReactions,
-    userReactions
+    userReactions,
   );
 
   return timelineItemsWithReactions.map((timelineItem) => {
@@ -157,7 +157,7 @@ export async function getUserTimelinePaginated(
  */
 export async function getUsersFollowingTimelinePaginated(
   loggedInUserId: number,
-  cursor?: number
+  cursor?: number,
 ) {
   const followingId = await prisma.user.findUnique({
     where: { id: loggedInUserId },
@@ -189,7 +189,7 @@ export async function getUsersFollowingTimelinePaginated(
     take: 10,
     skip: cursor ? 1 : 0,
     cursor: cursor ? { id: cursor } : undefined,
-    orderBy: { id: "desc" },
+    orderBy: { id: 'desc' },
     include: {
       author: true,
       post: {
@@ -213,7 +213,7 @@ export async function getUsersFollowingTimelinePaginated(
   const timelineItemsWithReactions = mapTimelineItemsWithPostReactions(
     timelineItems,
     postsReactions,
-    userReactions
+    userReactions,
   );
 
   return timelineItemsWithReactions.map((timelineItem) => {

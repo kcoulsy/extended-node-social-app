@@ -1,39 +1,40 @@
 (function (f) {
-  if (typeof exports === "object" && typeof module !== "undefined") {
+  if (typeof exports === 'object' && typeof module !== 'undefined') {
     module.exports = f();
-  } else if (typeof define === "function" && define.amd) {
+  } else if (typeof define === 'function' && define.amd) {
     define([], f);
   } else {
-    var g;
-    if (typeof window !== "undefined") {
+    let g;
+    if (typeof window !== 'undefined') {
       g = window;
-    } else if (typeof global !== "undefined") {
+    } else if (typeof global !== 'undefined') {
       g = global;
-    } else if (typeof self !== "undefined") {
+    } else if (typeof self !== 'undefined') {
       g = self;
     } else {
       g = this;
     }
     g.ejs = f();
   }
-})(function () {
-  var define, module, exports;
+}(() => {
+  let define; let module; let
+    exports;
   return (function () {
     function r(e, n, t) {
       function o(i, f) {
         if (!n[i]) {
           if (!e[i]) {
-            var c = "function" == typeof require && require;
+            const c = typeof require === 'function' && require;
             if (!f && c) return c(i, !0);
             if (u) return u(i, !0);
-            var a = new Error("Cannot find module '" + i + "'");
-            throw ((a.code = "MODULE_NOT_FOUND"), a);
+            const a = new Error(`Cannot find module '${i}'`);
+            throw ((a.code = 'MODULE_NOT_FOUND'), a);
           }
-          var p = (n[i] = { exports: {} });
+          const p = (n[i] = { exports: {} });
           e[i][0].call(
             p.exports,
-            function (r) {
-              var n = e[i][1][r];
+            (r) => {
+              const n = e[i][1][r];
               return o(n || r);
             },
             p,
@@ -41,75 +42,72 @@
             r,
             e,
             n,
-            t
+            t,
           );
         }
         return n[i].exports;
       }
       for (
-        var u = "function" == typeof require && require, i = 0;
+        var u = typeof require === 'function' && require, i = 0;
         i < t.length;
         i++
-      )
-        o(t[i]);
+      ) o(t[i]);
       return o;
     }
     return r;
-  })()(
+  }())(
     {
       1: [
         function (require, module, exports) {
-          "use strict";
-          var fs = require("fs");
-          var path = require("path");
-          var utils = require("./utils");
-          var scopeOptionWarned = false;
-          var _VERSION_STRING = require("../package.json").version;
-          var _DEFAULT_OPEN_DELIMITER = "<";
-          var _DEFAULT_CLOSE_DELIMITER = ">";
-          var _DEFAULT_DELIMITER = "%";
-          var _DEFAULT_LOCALS_NAME = "locals";
-          var _NAME = "ejs";
-          var _REGEX_STRING = "(<%%|%%>|<%=|<%-|<%_|<%#|<%|%>|-%>|_%>)";
-          var _OPTS_PASSABLE_WITH_DATA = [
-            "delimiter",
-            "scope",
-            "context",
-            "debug",
-            "compileDebug",
-            "client",
-            "_with",
-            "rmWhitespace",
-            "strict",
-            "filename",
-            "async",
+          const fs = require('fs');
+          const path = require('path');
+          const utils = require('./utils');
+          let scopeOptionWarned = false;
+          const _VERSION_STRING = require('../package.json').version;
+          const _DEFAULT_OPEN_DELIMITER = '<';
+          const _DEFAULT_CLOSE_DELIMITER = '>';
+          const _DEFAULT_DELIMITER = '%';
+          const _DEFAULT_LOCALS_NAME = 'locals';
+          const _NAME = 'ejs';
+          const _REGEX_STRING = '(<%%|%%>|<%=|<%-|<%_|<%#|<%|%>|-%>|_%>)';
+          const _OPTS_PASSABLE_WITH_DATA = [
+            'delimiter',
+            'scope',
+            'context',
+            'debug',
+            'compileDebug',
+            'client',
+            '_with',
+            'rmWhitespace',
+            'strict',
+            'filename',
+            'async',
           ];
-          var _OPTS_PASSABLE_WITH_DATA_EXPRESS =
-            _OPTS_PASSABLE_WITH_DATA.concat("cache");
-          var _BOM = /^\uFEFF/;
-          var _JS_IDENTIFIER = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/;
+          const _OPTS_PASSABLE_WITH_DATA_EXPRESS = _OPTS_PASSABLE_WITH_DATA.concat('cache');
+          const _BOM = /^\uFEFF/;
+          const _JS_IDENTIFIER = /^[a-zA-Z_$][0-9a-zA-Z_$]*$/;
           exports.cache = utils.cache;
           exports.fileLoader = fs.readFileSync;
           exports.localsName = _DEFAULT_LOCALS_NAME;
-          exports.promiseImpl = new Function("return this;")().Promise;
+          exports.promiseImpl = new Function('return this;')().Promise;
           exports.resolveInclude = function (name, filename, isDir) {
-            var dirname = path.dirname;
-            var extname = path.extname;
-            var resolve = path.resolve;
-            var includePath = resolve(
+            const { dirname } = path;
+            const { extname } = path;
+            const { resolve } = path;
+            let includePath = resolve(
               isDir ? filename : dirname(filename),
-              name
+              name,
             );
-            var ext = extname(name);
+            const ext = extname(name);
             if (!ext) {
-              includePath += ".ejs";
+              includePath += '.ejs';
             }
             return includePath;
           };
           function resolvePaths(name, paths) {
-            var filePath;
+            let filePath;
             if (
-              paths.some(function (v) {
+              paths.some((v) => {
                 filePath = exports.resolveInclude(name, v, true);
                 return fs.existsSync(filePath);
               })
@@ -118,19 +116,19 @@
             }
           }
           function getIncludePath(path, options) {
-            var includePath;
-            var filePath;
-            var views = options.views;
-            var match = /^[A-Za-z]+:\\|^\//.exec(path);
+            let includePath;
+            let filePath;
+            const { views } = options;
+            const match = /^[A-Za-z]+:\\|^\//.exec(path);
             if (match && match.length) {
-              path = path.replace(/^\/*/, "");
+              path = path.replace(/^\/*/, '');
               if (Array.isArray(options.root)) {
                 includePath = resolvePaths(path, options.root);
               } else {
                 includePath = exports.resolveInclude(
                   path,
-                  options.root || "/",
-                  true
+                  options.root || '/',
+                  true,
                 );
               }
             } else {
@@ -143,38 +141,38 @@
               if (!includePath && Array.isArray(views)) {
                 includePath = resolvePaths(path, views);
               }
-              if (!includePath && typeof options.includer !== "function") {
+              if (!includePath && typeof options.includer !== 'function') {
                 throw new Error(
-                  'Could not find the include file "' +
-                    options.escapeFunction(path) +
-                    '"'
+                  `Could not find the include file "${
+                    options.escapeFunction(path)
+                  }"`,
                 );
               }
             }
             return includePath;
           }
           function handleCache(options, template) {
-            var func;
-            var filename = options.filename;
-            var hasTemplate = arguments.length > 1;
+            let func;
+            const { filename } = options;
+            const hasTemplate = arguments.length > 1;
             if (options.cache) {
               if (!filename) {
-                throw new Error("cache option requires a filename");
+                throw new Error('cache option requires a filename');
               }
               func = exports.cache.get(filename);
               if (func) {
                 return func;
               }
               if (!hasTemplate) {
-                template = fileLoader(filename).toString().replace(_BOM, "");
+                template = fileLoader(filename).toString().replace(_BOM, '');
               }
             } else if (!hasTemplate) {
               if (!filename) {
                 throw new Error(
-                  "Internal EJS error: no file name or template " + "provided"
+                  'Internal EJS error: no file name or template ' + 'provided',
                 );
               }
-              template = fileLoader(filename).toString().replace(_BOM, "");
+              template = fileLoader(filename).toString().replace(_BOM, '');
             }
             func = exports.compile(template, options);
             if (options.cache) {
@@ -183,10 +181,10 @@
             return func;
           }
           function tryHandleCache(options, data, cb) {
-            var result;
+            let result;
             if (!cb) {
-              if (typeof exports.promiseImpl == "function") {
-                return new exports.promiseImpl(function (resolve, reject) {
+              if (typeof exports.promiseImpl === 'function') {
+                return new exports.promiseImpl((resolve, reject) => {
                   try {
                     result = handleCache(options)(data);
                     resolve(result);
@@ -194,9 +192,8 @@
                     reject(err);
                   }
                 });
-              } else {
-                throw new Error("Please provide a callback function");
               }
+              throw new Error('Please provide a callback function');
             } else {
               try {
                 result = handleCache(options)(data);
@@ -210,13 +207,13 @@
             return exports.fileLoader(filePath);
           }
           function includeFile(path, options) {
-            var opts = utils.shallowCopy(
+            const opts = utils.shallowCopy(
               utils.createNullProtoObjWherePossible(),
-              options
+              options,
             );
             opts.filename = getIncludePath(path, opts);
-            if (typeof options.includer === "function") {
-              var includerResult = options.includer(path, opts.filename);
+            if (typeof options.includer === 'function') {
+              const includerResult = options.includer(path, opts.filename);
               if (includerResult) {
                 if (includerResult.filename) {
                   opts.filename = includerResult.filename;
@@ -229,37 +226,36 @@
             return handleCache(opts);
           }
           function rethrow(err, str, flnm, lineno, esc) {
-            var lines = str.split("\n");
-            var start = Math.max(lineno - 3, 0);
-            var end = Math.min(lines.length, lineno + 3);
-            var filename = esc(flnm);
-            var context = lines
+            const lines = str.split('\n');
+            const start = Math.max(lineno - 3, 0);
+            const end = Math.min(lines.length, lineno + 3);
+            const filename = esc(flnm);
+            const context = lines
               .slice(start, end)
-              .map(function (line, i) {
-                var curr = i + start + 1;
-                return (curr == lineno ? " >> " : "    ") + curr + "| " + line;
+              .map((line, i) => {
+                const curr = i + start + 1;
+                return `${(curr == lineno ? ' >> ' : '    ') + curr}| ${line}`;
               })
-              .join("\n");
+              .join('\n');
             err.path = filename;
-            err.message =
-              (filename || "ejs") +
-              ":" +
-              lineno +
-              "\n" +
-              context +
-              "\n\n" +
-              err.message;
+            err.message = `${filename || 'ejs'
+            }:${
+              lineno
+            }\n${
+              context
+            }\n\n${
+              err.message}`;
             throw err;
           }
           function stripSemi(str) {
-            return str.replace(/;(\s*$)/, "$1");
+            return str.replace(/;(\s*$)/, '$1');
           }
           exports.compile = function compile(template, opts) {
-            var templ;
+            let templ;
             if (opts && opts.scope) {
               if (!scopeOptionWarned) {
                 console.warn(
-                  "`scope` option is deprecated and will be removed in EJS 3"
+                  '`scope` option is deprecated and will be removed in EJS 3',
                 );
                 scopeOptionWarned = true;
               }
@@ -272,21 +268,21 @@
             return templ.compile();
           };
           exports.render = function (template, d, o) {
-            var data = d || utils.createNullProtoObjWherePossible();
-            var opts = o || utils.createNullProtoObjWherePossible();
+            const data = d || utils.createNullProtoObjWherePossible();
+            const opts = o || utils.createNullProtoObjWherePossible();
             if (arguments.length == 2) {
               utils.shallowCopyFromList(opts, data, _OPTS_PASSABLE_WITH_DATA);
             }
             return handleCache(opts, template)(data);
           };
           exports.renderFile = function () {
-            var args = Array.prototype.slice.call(arguments);
-            var filename = args.shift();
-            var cb;
-            var opts = { filename: filename };
-            var data;
-            var viewOpts;
-            if (typeof arguments[arguments.length - 1] == "function") {
+            const args = Array.prototype.slice.call(arguments);
+            const filename = args.shift();
+            let cb;
+            const opts = { filename };
+            let data;
+            let viewOpts;
+            if (typeof arguments[arguments.length - 1] === 'function') {
               cb = args.pop();
             }
             if (args.length) {
@@ -298,10 +294,10 @@
                   if (data.settings.views) {
                     opts.views = data.settings.views;
                   }
-                  if (data.settings["view cache"]) {
+                  if (data.settings['view cache']) {
                     opts.cache = true;
                   }
-                  viewOpts = data.settings["view options"];
+                  viewOpts = data.settings['view options'];
                   if (viewOpts) {
                     utils.shallowCopy(opts, viewOpts);
                   }
@@ -309,7 +305,7 @@
                 utils.shallowCopyFromList(
                   opts,
                   data,
-                  _OPTS_PASSABLE_WITH_DATA_EXPRESS
+                  _OPTS_PASSABLE_WITH_DATA_EXPRESS,
                 );
               }
               opts.filename = filename;
@@ -324,28 +320,24 @@
           };
           function Template(text, opts) {
             opts = opts || utils.createNullProtoObjWherePossible();
-            var options = utils.createNullProtoObjWherePossible();
+            const options = utils.createNullProtoObjWherePossible();
             this.templateText = text;
             this.mode = null;
             this.truncate = false;
             this.currentLine = 1;
-            this.source = "";
+            this.source = '';
             options.client = opts.client || false;
-            options.escapeFunction =
-              opts.escape || opts.escapeFunction || utils.escapeXML;
+            options.escapeFunction = opts.escape || opts.escapeFunction || utils.escapeXML;
             options.compileDebug = opts.compileDebug !== false;
             options.debug = !!opts.debug;
             options.filename = opts.filename;
-            options.openDelimiter =
-              opts.openDelimiter ||
-              exports.openDelimiter ||
-              _DEFAULT_OPEN_DELIMITER;
-            options.closeDelimiter =
-              opts.closeDelimiter ||
-              exports.closeDelimiter ||
-              _DEFAULT_CLOSE_DELIMITER;
-            options.delimiter =
-              opts.delimiter || exports.delimiter || _DEFAULT_DELIMITER;
+            options.openDelimiter = opts.openDelimiter
+              || exports.openDelimiter
+              || _DEFAULT_OPEN_DELIMITER;
+            options.closeDelimiter = opts.closeDelimiter
+              || exports.closeDelimiter
+              || _DEFAULT_CLOSE_DELIMITER;
+            options.delimiter = opts.delimiter || exports.delimiter || _DEFAULT_DELIMITER;
             options.strict = opts.strict || false;
             options.context = opts.context;
             options.cache = opts.cache || false;
@@ -353,156 +345,149 @@
             options.root = opts.root;
             options.includer = opts.includer;
             options.outputFunctionName = opts.outputFunctionName;
-            options.localsName =
-              opts.localsName || exports.localsName || _DEFAULT_LOCALS_NAME;
+            options.localsName = opts.localsName || exports.localsName || _DEFAULT_LOCALS_NAME;
             options.views = opts.views;
             options.async = opts.async;
             options.destructuredLocals = opts.destructuredLocals;
-            options.legacyInclude =
-              typeof opts.legacyInclude != "undefined"
-                ? !!opts.legacyInclude
-                : true;
+            options.legacyInclude = typeof opts.legacyInclude !== 'undefined'
+              ? !!opts.legacyInclude
+              : true;
             if (options.strict) {
               options._with = false;
             } else {
-              options._with =
-                typeof opts._with != "undefined" ? opts._with : true;
+              options._with = typeof opts._with !== 'undefined' ? opts._with : true;
             }
             this.opts = options;
             this.regex = this.createRegex();
           }
           Template.modes = {
-            EVAL: "eval",
-            ESCAPED: "escaped",
-            RAW: "raw",
-            COMMENT: "comment",
-            LITERAL: "literal",
+            EVAL: 'eval',
+            ESCAPED: 'escaped',
+            RAW: 'raw',
+            COMMENT: 'comment',
+            LITERAL: 'literal',
           };
           Template.prototype = {
-            createRegex: function () {
-              var str = _REGEX_STRING;
-              var delim = utils.escapeRegExpChars(this.opts.delimiter);
-              var open = utils.escapeRegExpChars(this.opts.openDelimiter);
-              var close = utils.escapeRegExpChars(this.opts.closeDelimiter);
+            createRegex() {
+              let str = _REGEX_STRING;
+              const delim = utils.escapeRegExpChars(this.opts.delimiter);
+              const open = utils.escapeRegExpChars(this.opts.openDelimiter);
+              const close = utils.escapeRegExpChars(this.opts.closeDelimiter);
               str = str
                 .replace(/%/g, delim)
                 .replace(/</g, open)
                 .replace(/>/g, close);
               return new RegExp(str);
             },
-            compile: function () {
-              var src;
-              var fn;
-              var opts = this.opts;
-              var prepended = "";
-              var appended = "";
-              var escapeFn = opts.escapeFunction;
-              var ctor;
-              var sanitizedFilename = opts.filename
+            compile() {
+              let src;
+              let fn;
+              const { opts } = this;
+              let prepended = '';
+              let appended = '';
+              const escapeFn = opts.escapeFunction;
+              let ctor;
+              const sanitizedFilename = opts.filename
                 ? JSON.stringify(opts.filename)
-                : "undefined";
+                : 'undefined';
               if (!this.source) {
                 this.generateSource();
-                prepended +=
-                  '  var __output = "";\n' +
-                  "  function __append(s) { if (s !== undefined && s !== null) __output += s }\n";
+                prepended
+                  += '  var __output = "";\n'
+                  + '  function __append(s) { if (s !== undefined && s !== null) __output += s }\n';
                 if (opts.outputFunctionName) {
                   if (!_JS_IDENTIFIER.test(opts.outputFunctionName)) {
                     throw new Error(
-                      "outputFunctionName is not a valid JS identifier."
+                      'outputFunctionName is not a valid JS identifier.',
                     );
                   }
-                  prepended +=
-                    "  var " + opts.outputFunctionName + " = __append;" + "\n";
+                  prepended
+                    += `  var ${opts.outputFunctionName} = __append;` + '\n';
                 }
                 if (opts.localsName && !_JS_IDENTIFIER.test(opts.localsName)) {
-                  throw new Error("localsName is not a valid JS identifier.");
+                  throw new Error('localsName is not a valid JS identifier.');
                 }
                 if (opts.destructuredLocals && opts.destructuredLocals.length) {
-                  var destructuring =
-                    "  var __locals = (" + opts.localsName + " || {}),\n";
-                  for (var i = 0; i < opts.destructuredLocals.length; i++) {
-                    var name = opts.destructuredLocals[i];
+                  let destructuring = `  var __locals = (${opts.localsName} || {}),\n`;
+                  for (let i = 0; i < opts.destructuredLocals.length; i++) {
+                    const name = opts.destructuredLocals[i];
                     if (!_JS_IDENTIFIER.test(name)) {
                       throw new Error(
-                        "destructuredLocals[" +
-                          i +
-                          "] is not a valid JS identifier."
+                        `destructuredLocals[${
+                          i
+                        }] is not a valid JS identifier.`,
                       );
                     }
                     if (i > 0) {
-                      destructuring += ",\n  ";
+                      destructuring += ',\n  ';
                     }
-                    destructuring += name + " = __locals." + name;
+                    destructuring += `${name} = __locals.${name}`;
                   }
-                  prepended += destructuring + ";\n";
+                  prepended += `${destructuring};\n`;
                 }
                 if (opts._with !== false) {
-                  prepended +=
-                    "  with (" + opts.localsName + " || {}) {" + "\n";
-                  appended += "  }" + "\n";
+                  prepended
+                    += `  with (${opts.localsName} || {}) {` + '\n';
+                  appended += '  }' + '\n';
                 }
-                appended += "  return __output;" + "\n";
+                appended += '  return __output;' + '\n';
                 this.source = prepended + this.source + appended;
               }
               if (opts.compileDebug) {
-                src =
-                  "var __line = 1" +
-                  "\n" +
-                  "  , __lines = " +
-                  JSON.stringify(this.templateText) +
-                  "\n" +
-                  "  , __filename = " +
-                  sanitizedFilename +
-                  ";" +
-                  "\n" +
-                  "try {" +
-                  "\n" +
-                  this.source +
-                  "} catch (e) {" +
-                  "\n" +
-                  "  rethrow(e, __lines, __filename, __line, escapeFn);" +
-                  "\n" +
-                  "}" +
-                  "\n";
+                src = 'var __line = 1'
+                  + '\n'
+                  + `  , __lines = ${
+                    JSON.stringify(this.templateText)
+                  }\n`
+                  + `  , __filename = ${
+                    sanitizedFilename
+                  };`
+                  + '\n'
+                  + 'try {'
+                  + `\n${
+                    this.source
+                  }} catch (e) {`
+                  + '\n'
+                  + '  rethrow(e, __lines, __filename, __line, escapeFn);'
+                  + '\n'
+                  + '}'
+                  + '\n';
               } else {
                 src = this.source;
               }
               if (opts.client) {
-                src =
-                  "escapeFn = escapeFn || " +
-                  escapeFn.toString() +
-                  ";" +
-                  "\n" +
-                  src;
+                src = `escapeFn = escapeFn || ${
+                  escapeFn.toString()
+                };`
+                  + `\n${
+                    src}`;
                 if (opts.compileDebug) {
-                  src =
-                    "rethrow = rethrow || " +
-                    rethrow.toString() +
-                    ";" +
-                    "\n" +
-                    src;
+                  src = `rethrow = rethrow || ${
+                    rethrow.toString()
+                  };`
+                    + `\n${
+                      src}`;
                 }
               }
               if (opts.strict) {
-                src = '"use strict";\n' + src;
+                src = `"use strict";\n${src}`;
               }
               if (opts.debug) {
                 console.log(src);
               }
               if (opts.compileDebug && opts.filename) {
-                src = src + "\n" + "//# sourceURL=" + sanitizedFilename + "\n";
+                src = `${src}\n` + `//# sourceURL=${sanitizedFilename}\n`;
               }
               try {
                 if (opts.async) {
                   try {
                     ctor = new Function(
-                      "return (async function(){}).constructor;"
+                      'return (async function(){}).constructor;',
                     )();
                   } catch (e) {
                     if (e instanceof SyntaxError) {
                       throw new Error(
-                        "This environment does not support async/await"
+                        'This environment does not support async/await',
                       );
                     } else {
                       throw e;
@@ -512,54 +497,54 @@
                   ctor = Function;
                 }
                 fn = new ctor(
-                  opts.localsName + ", escapeFn, include, rethrow",
-                  src
+                  `${opts.localsName}, escapeFn, include, rethrow`,
+                  src,
                 );
               } catch (e) {
                 if (e instanceof SyntaxError) {
                   if (opts.filename) {
-                    e.message += " in " + opts.filename;
+                    e.message += ` in ${opts.filename}`;
                   }
-                  e.message += " while compiling ejs\n\n";
-                  e.message +=
-                    "If the above error is not helpful, you may want to try EJS-Lint:\n";
-                  e.message += "https://github.com/RyanZim/EJS-Lint";
+                  e.message += ' while compiling ejs\n\n';
+                  e.message
+                    += 'If the above error is not helpful, you may want to try EJS-Lint:\n';
+                  e.message += 'https://github.com/RyanZim/EJS-Lint';
                   if (!opts.async) {
-                    e.message += "\n";
-                    e.message +=
-                      "Or, if you meant to create an async function, pass `async: true` as an option.";
+                    e.message += '\n';
+                    e.message
+                      += 'Or, if you meant to create an async function, pass `async: true` as an option.';
                   }
                 }
                 throw e;
               }
-              var returnedFn = opts.client
+              const returnedFn = opts.client
                 ? fn
                 : function anonymous(data) {
-                    var include = function (path, includeData) {
-                      var d = utils.shallowCopy(
-                        utils.createNullProtoObjWherePossible(),
-                        data
-                      );
-                      if (includeData) {
-                        d = utils.shallowCopy(d, includeData);
-                      }
-                      return includeFile(path, opts)(d);
-                    };
-                    return fn.apply(opts.context, [
-                      data || utils.createNullProtoObjWherePossible(),
-                      escapeFn,
-                      include,
-                      rethrow,
-                    ]);
+                  const include = function (path, includeData) {
+                    let d = utils.shallowCopy(
+                      utils.createNullProtoObjWherePossible(),
+                      data,
+                    );
+                    if (includeData) {
+                      d = utils.shallowCopy(d, includeData);
+                    }
+                    return includeFile(path, opts)(d);
                   };
+                  return fn.apply(opts.context, [
+                    data || utils.createNullProtoObjWherePossible(),
+                    escapeFn,
+                    include,
+                    rethrow,
+                  ]);
+                };
               if (
-                opts.filename &&
-                typeof Object.defineProperty === "function"
+                opts.filename
+                && typeof Object.defineProperty === 'function'
               ) {
-                var filename = opts.filename;
-                var basename = path.basename(filename, path.extname(filename));
+                const { filename } = opts;
+                const basename = path.basename(filename, path.extname(filename));
                 try {
-                  Object.defineProperty(returnedFn, "name", {
+                  Object.defineProperty(returnedFn, 'name', {
                     value: basename,
                     writable: false,
                     enumerable: false,
@@ -569,38 +554,38 @@
               }
               return returnedFn;
             },
-            generateSource: function () {
-              var opts = this.opts;
+            generateSource() {
+              const { opts } = this;
               if (opts.rmWhitespace) {
                 this.templateText = this.templateText
-                  .replace(/[\r\n]+/g, "\n")
-                  .replace(/^\s+|\s+$/gm, "");
+                  .replace(/[\r\n]+/g, '\n')
+                  .replace(/^\s+|\s+$/gm, '');
               }
               this.templateText = this.templateText
-                .replace(/[ \t]*<%_/gm, "<%_")
-                .replace(/_%>[ \t]*/gm, "_%>");
-              var self = this;
-              var matches = this.parseTemplateText();
-              var d = this.opts.delimiter;
-              var o = this.opts.openDelimiter;
-              var c = this.opts.closeDelimiter;
+                .replace(/[ \t]*<%_/gm, '<%_')
+                .replace(/_%>[ \t]*/gm, '_%>');
+              const self = this;
+              const matches = this.parseTemplateText();
+              const d = this.opts.delimiter;
+              const o = this.opts.openDelimiter;
+              const c = this.opts.closeDelimiter;
               if (matches && matches.length) {
-                matches.forEach(function (line, index) {
-                  var closing;
+                matches.forEach((line, index) => {
+                  let closing;
                   if (
-                    line.indexOf(o + d) === 0 &&
-                    line.indexOf(o + d + d) !== 0
+                    line.indexOf(o + d) === 0
+                    && line.indexOf(o + d + d) !== 0
                   ) {
                     closing = matches[index + 2];
                     if (
                       !(
-                        closing == d + c ||
-                        closing == "-" + d + c ||
-                        closing == "_" + d + c
+                        closing == d + c
+                        || closing == `-${d}${c}`
+                        || closing == `_${d}${c}`
                       )
                     ) {
                       throw new Error(
-                        'Could not find matching close tag for "' + line + '".'
+                        `Could not find matching close tag for "${line}".`,
                       );
                     }
                   }
@@ -608,12 +593,12 @@
                 });
               }
             },
-            parseTemplateText: function () {
-              var str = this.templateText;
-              var pat = this.regex;
-              var result = pat.exec(str);
-              var arr = [];
-              var firstPos;
+            parseTemplateText() {
+              let str = this.templateText;
+              const pat = this.regex;
+              let result = pat.exec(str);
+              const arr = [];
+              let firstPos;
               while (result) {
                 firstPos = result.index;
                 if (firstPos !== 0) {
@@ -629,66 +614,65 @@
               }
               return arr;
             },
-            _addOutput: function (line) {
+            _addOutput(line) {
               if (this.truncate) {
-                line = line.replace(/^(?:\r\n|\r|\n)/, "");
+                line = line.replace(/^(?:\r\n|\r|\n)/, '');
                 this.truncate = false;
               }
               if (!line) {
                 return line;
               }
-              line = line.replace(/\\/g, "\\\\");
-              line = line.replace(/\n/g, "\\n");
-              line = line.replace(/\r/g, "\\r");
+              line = line.replace(/\\/g, '\\\\');
+              line = line.replace(/\n/g, '\\n');
+              line = line.replace(/\r/g, '\\r');
               line = line.replace(/"/g, '\\"');
-              this.source += '    ; __append("' + line + '")' + "\n";
+              this.source += `    ; __append("${line}")` + '\n';
             },
-            scanLine: function (line) {
-              var self = this;
-              var d = this.opts.delimiter;
-              var o = this.opts.openDelimiter;
-              var c = this.opts.closeDelimiter;
-              var newLineCount = 0;
-              newLineCount = line.split("\n").length - 1;
+            scanLine(line) {
+              const self = this;
+              const d = this.opts.delimiter;
+              const o = this.opts.openDelimiter;
+              const c = this.opts.closeDelimiter;
+              let newLineCount = 0;
+              newLineCount = line.split('\n').length - 1;
               switch (line) {
                 case o + d:
-                case o + d + "_":
+                case `${o + d}_`:
                   this.mode = Template.modes.EVAL;
                   break;
-                case o + d + "=":
+                case `${o + d}=`:
                   this.mode = Template.modes.ESCAPED;
                   break;
-                case o + d + "-":
+                case `${o + d}-`:
                   this.mode = Template.modes.RAW;
                   break;
-                case o + d + "#":
+                case `${o + d}#`:
                   this.mode = Template.modes.COMMENT;
                   break;
                 case o + d + d:
                   this.mode = Template.modes.LITERAL;
-                  this.source +=
-                    '    ; __append("' +
-                    line.replace(o + d + d, o + d) +
-                    '")' +
-                    "\n";
+                  this.source
+                    += `    ; __append("${
+                      line.replace(o + d + d, o + d)
+                    }")`
+                    + '\n';
                   break;
                 case d + d + c:
                   this.mode = Template.modes.LITERAL;
-                  this.source +=
-                    '    ; __append("' +
-                    line.replace(d + d + c, d + c) +
-                    '")' +
-                    "\n";
+                  this.source
+                    += `    ; __append("${
+                      line.replace(d + d + c, d + c)
+                    }")`
+                    + '\n';
                   break;
                 case d + c:
-                case "-" + d + c:
-                case "_" + d + c:
+                case `-${d}${c}`:
+                case `_${d}${c}`:
                   if (this.mode == Template.modes.LITERAL) {
                     this._addOutput(line);
                   }
                   this.mode = null;
-                  this.truncate =
-                    line.indexOf("-") === 0 || line.indexOf("_") === 0;
+                  this.truncate = line.indexOf('-') === 0 || line.indexOf('_') === 0;
                   break;
                 default:
                   if (this.mode) {
@@ -696,24 +680,24 @@
                       case Template.modes.EVAL:
                       case Template.modes.ESCAPED:
                       case Template.modes.RAW:
-                        if (line.lastIndexOf("//") > line.lastIndexOf("\n")) {
-                          line += "\n";
+                        if (line.lastIndexOf('//') > line.lastIndexOf('\n')) {
+                          line += '\n';
                         }
                     }
                     switch (this.mode) {
                       case Template.modes.EVAL:
-                        this.source += "    ; " + line + "\n";
+                        this.source += `    ; ${line}\n`;
                         break;
                       case Template.modes.ESCAPED:
-                        this.source +=
-                          "    ; __append(escapeFn(" +
-                          stripSemi(line) +
-                          "))" +
-                          "\n";
+                        this.source
+                          += `    ; __append(escapeFn(${
+                            stripSemi(line)
+                          }))`
+                          + '\n';
                         break;
                       case Template.modes.RAW:
-                        this.source +=
-                          "    ; __append(" + stripSemi(line) + ")" + "\n";
+                        this.source
+                          += `    ; __append(${stripSemi(line)})` + '\n';
                         break;
                       case Template.modes.COMMENT:
                         break;
@@ -727,7 +711,7 @@
               }
               if (self.opts.compileDebug && newLineCount) {
                 this.currentLine += newLineCount;
-                this.source += "    ; __line = " + this.currentLine + "\n";
+                this.source += `    ; __line = ${this.currentLine}\n`;
               }
             },
           };
@@ -735,62 +719,62 @@
           exports.__express = exports.renderFile;
           exports.VERSION = _VERSION_STRING;
           exports.name = _NAME;
-          if (typeof window != "undefined") {
+          if (typeof window !== 'undefined') {
             window.ejs = exports;
           }
         },
-        { "../package.json": 6, "./utils": 2, fs: 3, path: 4 },
+        {
+          '../package.json': 6, './utils': 2, fs: 3, path: 4,
+        },
       ],
       2: [
         function (require, module, exports) {
-          "use strict";
-          var regExpChars = /[|\\{}()[\]^$+*?.]/g;
-          var hasOwnProperty = Object.prototype.hasOwnProperty;
-          var hasOwn = function (obj, key) {
+          const regExpChars = /[|\\{}()[\]^$+*?.]/g;
+          const { hasOwnProperty } = Object.prototype;
+          const hasOwn = function (obj, key) {
             return hasOwnProperty.apply(obj, [key]);
           };
           exports.escapeRegExpChars = function (string) {
             if (!string) {
-              return "";
+              return '';
             }
-            return String(string).replace(regExpChars, "\\$&");
+            return String(string).replace(regExpChars, '\\$&');
           };
-          var _ENCODE_HTML_RULES = {
-            "&": "&amp;",
-            "<": "&lt;",
-            ">": "&gt;",
-            '"': "&#34;",
-            "'": "&#39;",
+          const _ENCODE_HTML_RULES = {
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            '"': '&#34;',
+            "'": '&#39;',
           };
-          var _MATCH_HTML = /[&<>'"]/g;
+          const _MATCH_HTML = /[&<>'"]/g;
           function encode_char(c) {
             return _ENCODE_HTML_RULES[c] || c;
           }
-          var escapeFuncStr =
-            "var _ENCODE_HTML_RULES = {\n" +
-            '      "&": "&amp;"\n' +
-            '    , "<": "&lt;"\n' +
-            '    , ">": "&gt;"\n' +
-            '    , \'"\': "&#34;"\n' +
-            '    , "\'": "&#39;"\n' +
-            "    }\n" +
-            "  , _MATCH_HTML = /[&<>'\"]/g;\n" +
-            "function encode_char(c) {\n" +
-            "  return _ENCODE_HTML_RULES[c] || c;\n" +
-            "};\n";
+          const escapeFuncStr = 'var _ENCODE_HTML_RULES = {\n'
+            + '      "&": "&amp;"\n'
+            + '    , "<": "&lt;"\n'
+            + '    , ">": "&gt;"\n'
+            + '    , \'"\': "&#34;"\n'
+            + '    , "\'": "&#39;"\n'
+            + '    }\n'
+            + "  , _MATCH_HTML = /[&<>'\"]/g;\n"
+            + 'function encode_char(c) {\n'
+            + '  return _ENCODE_HTML_RULES[c] || c;\n'
+            + '};\n';
           exports.escapeXML = function (markup) {
             return markup == undefined
-              ? ""
+              ? ''
               : String(markup).replace(_MATCH_HTML, encode_char);
           };
           function escapeXMLToString() {
             return (
-              Function.prototype.toString.call(this) + ";\n" + escapeFuncStr
+              `${Function.prototype.toString.call(this)};\n${escapeFuncStr}`
             );
           }
           try {
-            if (typeof Object.defineProperty === "function") {
-              Object.defineProperty(exports.escapeXML, "toString", {
+            if (typeof Object.defineProperty === 'function') {
+              Object.defineProperty(exports.escapeXML, 'toString', {
                 value: escapeXMLToString,
               });
             } else {
@@ -798,17 +782,17 @@
             }
           } catch (err) {
             console.warn(
-              "Unable to set escapeXML.toString (is the Function prototype frozen?)"
+              'Unable to set escapeXML.toString (is the Function prototype frozen?)',
             );
           }
           exports.shallowCopy = function (to, from) {
             from = from || {};
             if (to !== null && to !== undefined) {
-              for (var p in from) {
+              for (const p in from) {
                 if (!hasOwn(from, p)) {
                   continue;
                 }
-                if (p === "__proto__" || p === "constructor") {
+                if (p === '__proto__' || p === 'constructor') {
                   continue;
                 }
                 to[p] = from[p];
@@ -820,13 +804,13 @@
             list = list || [];
             from = from || {};
             if (to !== null && to !== undefined) {
-              for (var i = 0; i < list.length; i++) {
-                var p = list[i];
-                if (typeof from[p] != "undefined") {
+              for (let i = 0; i < list.length; i++) {
+                const p = list[i];
+                if (typeof from[p] !== 'undefined') {
                   if (!hasOwn(from, p)) {
                     continue;
                   }
-                  if (p === "__proto__" || p === "constructor") {
+                  if (p === '__proto__' || p === 'constructor') {
                     continue;
                   }
                   to[p] = from[p];
@@ -837,26 +821,24 @@
           };
           exports.cache = {
             _data: {},
-            set: function (key, val) {
+            set(key, val) {
               this._data[key] = val;
             },
-            get: function (key) {
+            get(key) {
               return this._data[key];
             },
-            remove: function (key) {
+            remove(key) {
               delete this._data[key];
             },
-            reset: function () {
+            reset() {
               this._data = {};
             },
           };
           exports.hyphenToCamel = function (str) {
-            return str.replace(/-[a-z]/g, function (match) {
-              return match[1].toUpperCase();
-            });
+            return str.replace(/-[a-z]/g, (match) => match[1].toUpperCase());
           };
           exports.createNullProtoObjWherePossible = (function () {
-            if (typeof Object.create == "function") {
+            if (typeof Object.create === 'function') {
               return function () {
                 return Object.create(null);
               };
@@ -869,7 +851,7 @@
             return function () {
               return {};
             };
-          })();
+          }());
         },
         {},
       ],
@@ -878,12 +860,12 @@
         function (require, module, exports) {
           (function (process) {
             function normalizeArray(parts, allowAboveRoot) {
-              var up = 0;
-              for (var i = parts.length - 1; i >= 0; i--) {
-                var last = parts[i];
-                if (last === ".") {
+              let up = 0;
+              for (let i = parts.length - 1; i >= 0; i--) {
+                const last = parts[i];
+                if (last === '.') {
                   parts.splice(i, 1);
-                } else if (last === "..") {
+                } else if (last === '..') {
                   parts.splice(i, 1);
                   up++;
                 } else if (up) {
@@ -893,113 +875,109 @@
               }
               if (allowAboveRoot) {
                 for (; up--; up) {
-                  parts.unshift("..");
+                  parts.unshift('..');
                 }
               }
               return parts;
             }
             exports.resolve = function () {
-              var resolvedPath = "",
-                resolvedAbsolute = false;
+              let resolvedPath = '';
+              let resolvedAbsolute = false;
               for (
-                var i = arguments.length - 1;
+                let i = arguments.length - 1;
                 i >= -1 && !resolvedAbsolute;
                 i--
               ) {
-                var path = i >= 0 ? arguments[i] : process.cwd();
-                if (typeof path !== "string") {
+                const path = i >= 0 ? arguments[i] : process.cwd();
+                if (typeof path !== 'string') {
                   throw new TypeError(
-                    "Arguments to path.resolve must be strings"
+                    'Arguments to path.resolve must be strings',
                   );
                 } else if (!path) {
                   continue;
                 }
-                resolvedPath = path + "/" + resolvedPath;
-                resolvedAbsolute = path.charAt(0) === "/";
+                resolvedPath = `${path}/${resolvedPath}`;
+                resolvedAbsolute = path.charAt(0) === '/';
               }
               resolvedPath = normalizeArray(
-                filter(resolvedPath.split("/"), function (p) {
-                  return !!p;
-                }),
-                !resolvedAbsolute
-              ).join("/");
-              return (resolvedAbsolute ? "/" : "") + resolvedPath || ".";
+                filter(resolvedPath.split('/'), (p) => !!p),
+                !resolvedAbsolute,
+              ).join('/');
+              return (resolvedAbsolute ? '/' : '') + resolvedPath || '.';
             };
             exports.normalize = function (path) {
-              var isAbsolute = exports.isAbsolute(path),
-                trailingSlash = substr(path, -1) === "/";
+              const isAbsolute = exports.isAbsolute(path);
+              const trailingSlash = substr(path, -1) === '/';
               path = normalizeArray(
-                filter(path.split("/"), function (p) {
-                  return !!p;
-                }),
-                !isAbsolute
-              ).join("/");
+                filter(path.split('/'), (p) => !!p),
+                !isAbsolute,
+              ).join('/');
               if (!path && !isAbsolute) {
-                path = ".";
+                path = '.';
               }
               if (path && trailingSlash) {
-                path += "/";
+                path += '/';
               }
-              return (isAbsolute ? "/" : "") + path;
+              return (isAbsolute ? '/' : '') + path;
             };
             exports.isAbsolute = function (path) {
-              return path.charAt(0) === "/";
+              return path.charAt(0) === '/';
             };
             exports.join = function () {
-              var paths = Array.prototype.slice.call(arguments, 0);
+              const paths = Array.prototype.slice.call(arguments, 0);
               return exports.normalize(
-                filter(paths, function (p, index) {
-                  if (typeof p !== "string") {
+                filter(paths, (p, index) => {
+                  if (typeof p !== 'string') {
                     throw new TypeError(
-                      "Arguments to path.join must be strings"
+                      'Arguments to path.join must be strings',
                     );
                   }
                   return p;
-                }).join("/")
+                }).join('/'),
               );
             };
             exports.relative = function (from, to) {
               from = exports.resolve(from).substr(1);
               to = exports.resolve(to).substr(1);
               function trim(arr) {
-                var start = 0;
+                let start = 0;
                 for (; start < arr.length; start++) {
-                  if (arr[start] !== "") break;
+                  if (arr[start] !== '') break;
                 }
-                var end = arr.length - 1;
+                let end = arr.length - 1;
                 for (; end >= 0; end--) {
-                  if (arr[end] !== "") break;
+                  if (arr[end] !== '') break;
                 }
                 if (start > end) return [];
                 return arr.slice(start, end - start + 1);
               }
-              var fromParts = trim(from.split("/"));
-              var toParts = trim(to.split("/"));
-              var length = Math.min(fromParts.length, toParts.length);
-              var samePartsLength = length;
+              const fromParts = trim(from.split('/'));
+              const toParts = trim(to.split('/'));
+              const length = Math.min(fromParts.length, toParts.length);
+              let samePartsLength = length;
               for (var i = 0; i < length; i++) {
                 if (fromParts[i] !== toParts[i]) {
                   samePartsLength = i;
                   break;
                 }
               }
-              var outputParts = [];
+              let outputParts = [];
               for (var i = samePartsLength; i < fromParts.length; i++) {
-                outputParts.push("..");
+                outputParts.push('..');
               }
               outputParts = outputParts.concat(toParts.slice(samePartsLength));
-              return outputParts.join("/");
+              return outputParts.join('/');
             };
-            exports.sep = "/";
-            exports.delimiter = ":";
+            exports.sep = '/';
+            exports.delimiter = ':';
             exports.dirname = function (path) {
-              if (typeof path !== "string") path = path + "";
-              if (path.length === 0) return ".";
-              var code = path.charCodeAt(0);
-              var hasRoot = code === 47;
-              var end = -1;
-              var matchedSlash = true;
-              for (var i = path.length - 1; i >= 1; --i) {
+              if (typeof path !== 'string') path += '';
+              if (path.length === 0) return '.';
+              let code = path.charCodeAt(0);
+              const hasRoot = code === 47;
+              let end = -1;
+              let matchedSlash = true;
+              for (let i = path.length - 1; i >= 1; --i) {
                 code = path.charCodeAt(i);
                 if (code === 47) {
                   if (!matchedSlash) {
@@ -1010,18 +988,18 @@
                   matchedSlash = false;
                 }
               }
-              if (end === -1) return hasRoot ? "/" : ".";
+              if (end === -1) return hasRoot ? '/' : '.';
               if (hasRoot && end === 1) {
-                return "/";
+                return '/';
               }
               return path.slice(0, end);
             };
             function basename(path) {
-              if (typeof path !== "string") path = path + "";
-              var start = 0;
-              var end = -1;
-              var matchedSlash = true;
-              var i;
+              if (typeof path !== 'string') path += '';
+              let start = 0;
+              let end = -1;
+              let matchedSlash = true;
+              let i;
               for (i = path.length - 1; i >= 0; --i) {
                 if (path.charCodeAt(i) === 47) {
                   if (!matchedSlash) {
@@ -1033,25 +1011,25 @@
                   end = i + 1;
                 }
               }
-              if (end === -1) return "";
+              if (end === -1) return '';
               return path.slice(start, end);
             }
             exports.basename = function (path, ext) {
-              var f = basename(path);
+              let f = basename(path);
               if (ext && f.substr(-1 * ext.length) === ext) {
                 f = f.substr(0, f.length - ext.length);
               }
               return f;
             };
             exports.extname = function (path) {
-              if (typeof path !== "string") path = path + "";
-              var startDot = -1;
-              var startPart = 0;
-              var end = -1;
-              var matchedSlash = true;
-              var preDotState = 0;
-              for (var i = path.length - 1; i >= 0; --i) {
-                var code = path.charCodeAt(i);
+              if (typeof path !== 'string') path += '';
+              let startDot = -1;
+              let startPart = 0;
+              let end = -1;
+              let matchedSlash = true;
+              let preDotState = 0;
+              for (let i = path.length - 1; i >= 0; --i) {
+                const code = path.charCodeAt(i);
                 if (code === 47) {
                   if (!matchedSlash) {
                     startPart = i + 1;
@@ -1071,52 +1049,51 @@
                 }
               }
               if (
-                startDot === -1 ||
-                end === -1 ||
-                preDotState === 0 ||
-                (preDotState === 1 &&
-                  startDot === end - 1 &&
-                  startDot === startPart + 1)
+                startDot === -1
+                || end === -1
+                || preDotState === 0
+                || (preDotState === 1
+                  && startDot === end - 1
+                  && startDot === startPart + 1)
               ) {
-                return "";
+                return '';
               }
               return path.slice(startDot, end);
             };
             function filter(xs, f) {
               if (xs.filter) return xs.filter(f);
-              var res = [];
-              for (var i = 0; i < xs.length; i++) {
+              const res = [];
+              for (let i = 0; i < xs.length; i++) {
                 if (f(xs[i], i, xs)) res.push(xs[i]);
               }
               return res;
             }
-            var substr =
-              "ab".substr(-1) === "b"
-                ? function (str, start, len) {
-                    return str.substr(start, len);
-                  }
-                : function (str, start, len) {
-                    if (start < 0) start = str.length + start;
-                    return str.substr(start, len);
-                  };
-          }).call(this, require("_process"));
+            var substr = 'ab'.substr(-1) === 'b'
+              ? function (str, start, len) {
+                return str.substr(start, len);
+              }
+              : function (str, start, len) {
+                if (start < 0) start = str.length + start;
+                return str.substr(start, len);
+              };
+          }).call(this, require('_process'));
         },
         { _process: 5 },
       ],
       5: [
         function (require, module, exports) {
-          var process = (module.exports = {});
-          var cachedSetTimeout;
-          var cachedClearTimeout;
+          const process = (module.exports = {});
+          let cachedSetTimeout;
+          let cachedClearTimeout;
           function defaultSetTimout() {
-            throw new Error("setTimeout has not been defined");
+            throw new Error('setTimeout has not been defined');
           }
           function defaultClearTimeout() {
-            throw new Error("clearTimeout has not been defined");
+            throw new Error('clearTimeout has not been defined');
           }
           (function () {
             try {
-              if (typeof setTimeout === "function") {
+              if (typeof setTimeout === 'function') {
                 cachedSetTimeout = setTimeout;
               } else {
                 cachedSetTimeout = defaultSetTimout;
@@ -1125,7 +1102,7 @@
               cachedSetTimeout = defaultSetTimout;
             }
             try {
-              if (typeof clearTimeout === "function") {
+              if (typeof clearTimeout === 'function') {
                 cachedClearTimeout = clearTimeout;
               } else {
                 cachedClearTimeout = defaultClearTimeout;
@@ -1133,14 +1110,14 @@
             } catch (e) {
               cachedClearTimeout = defaultClearTimeout;
             }
-          })();
+          }());
           function runTimeout(fun) {
             if (cachedSetTimeout === setTimeout) {
               return setTimeout(fun, 0);
             }
             if (
-              (cachedSetTimeout === defaultSetTimout || !cachedSetTimeout) &&
-              setTimeout
+              (cachedSetTimeout === defaultSetTimout || !cachedSetTimeout)
+              && setTimeout
             ) {
               cachedSetTimeout = setTimeout;
               return setTimeout(fun, 0);
@@ -1160,9 +1137,9 @@
               return clearTimeout(marker);
             }
             if (
-              (cachedClearTimeout === defaultClearTimeout ||
-                !cachedClearTimeout) &&
-              clearTimeout
+              (cachedClearTimeout === defaultClearTimeout
+                || !cachedClearTimeout)
+              && clearTimeout
             ) {
               cachedClearTimeout = clearTimeout;
               return clearTimeout(marker);
@@ -1177,10 +1154,10 @@
               }
             }
           }
-          var queue = [];
-          var draining = false;
-          var currentQueue;
-          var queueIndex = -1;
+          let queue = [];
+          let draining = false;
+          let currentQueue;
+          let queueIndex = -1;
           function cleanUpNextTick() {
             if (!draining || !currentQueue) {
               return;
@@ -1199,9 +1176,9 @@
             if (draining) {
               return;
             }
-            var timeout = runTimeout(cleanUpNextTick);
+            const timeout = runTimeout(cleanUpNextTick);
             draining = true;
-            var len = queue.length;
+            let len = queue.length;
             while (len) {
               currentQueue = queue;
               queue = [];
@@ -1218,9 +1195,9 @@
             runClearTimeout(timeout);
           }
           process.nextTick = function (fun) {
-            var args = new Array(arguments.length - 1);
+            const args = new Array(arguments.length - 1);
             if (arguments.length > 1) {
-              for (var i = 1; i < arguments.length; i++) {
+              for (let i = 1; i < arguments.length; i++) {
                 args[i - 1] = arguments[i];
               }
             }
@@ -1236,11 +1213,11 @@
           Item.prototype.run = function () {
             this.fun.apply(null, this.array);
           };
-          process.title = "browser";
+          process.title = 'browser';
           process.browser = true;
           process.env = {};
           process.argv = [];
-          process.version = "";
+          process.version = '';
           process.versions = {};
           function noop() {}
           process.on = noop;
@@ -1256,13 +1233,13 @@
             return [];
           };
           process.binding = function (name) {
-            throw new Error("process.binding is not supported");
+            throw new Error('process.binding is not supported');
           };
           process.cwd = function () {
-            return "/";
+            return '/';
           };
           process.chdir = function (dir) {
-            throw new Error("process.chdir is not supported");
+            throw new Error('process.chdir is not supported');
           };
           process.umask = function () {
             return 0;
@@ -1273,37 +1250,37 @@
       6: [
         function (require, module, exports) {
           module.exports = {
-            name: "ejs",
-            description: "Embedded JavaScript templates",
-            keywords: ["template", "engine", "ejs"],
-            version: "3.1.8",
-            author: "Matthew Eernisse <mde@fleegix.org> (http://fleegix.org)",
-            license: "Apache-2.0",
-            bin: { ejs: "./bin/cli.js" },
-            main: "./lib/ejs.js",
-            jsdelivr: "ejs.min.js",
-            unpkg: "ejs.min.js",
-            repository: { type: "git", url: "git://github.com/mde/ejs.git" },
-            bugs: "https://github.com/mde/ejs/issues",
-            homepage: "https://github.com/mde/ejs",
-            dependencies: { jake: "^10.8.5" },
+            name: 'ejs',
+            description: 'Embedded JavaScript templates',
+            keywords: ['template', 'engine', 'ejs'],
+            version: '3.1.8',
+            author: 'Matthew Eernisse <mde@fleegix.org> (http://fleegix.org)',
+            license: 'Apache-2.0',
+            bin: { ejs: './bin/cli.js' },
+            main: './lib/ejs.js',
+            jsdelivr: 'ejs.min.js',
+            unpkg: 'ejs.min.js',
+            repository: { type: 'git', url: 'git://github.com/mde/ejs.git' },
+            bugs: 'https://github.com/mde/ejs/issues',
+            homepage: 'https://github.com/mde/ejs',
+            dependencies: { jake: '^10.8.5' },
             devDependencies: {
-              browserify: "^16.5.1",
-              eslint: "^6.8.0",
-              "git-directory-deploy": "^1.5.1",
-              jsdoc: "^4.0.2",
-              "lru-cache": "^4.0.1",
-              mocha: "^10.2.0",
-              "uglify-js": "^3.3.16",
+              browserify: '^16.5.1',
+              eslint: '^6.8.0',
+              'git-directory-deploy': '^1.5.1',
+              jsdoc: '^4.0.2',
+              'lru-cache': '^4.0.1',
+              mocha: '^10.2.0',
+              'uglify-js': '^3.3.16',
             },
-            engines: { node: ">=0.10.0" },
-            scripts: { test: "mocha -u tdd" },
+            engines: { node: '>=0.10.0' },
+            scripts: { test: 'mocha -u tdd' },
           };
         },
         {},
       ],
     },
     {},
-    [1]
+    [1],
   )(1);
-});
+}));

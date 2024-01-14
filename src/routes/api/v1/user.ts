@@ -1,11 +1,10 @@
-import { FastifyInstance, FastifyPluginOptions } from "fastify";
-import { createPost } from "../../../services/posts";
-import prisma from "../../../db";
+import { FastifyInstance, FastifyPluginOptions } from 'fastify';
+import prisma from '../../../db';
 
 export default function userRouter(
   fastify: FastifyInstance,
   options: FastifyPluginOptions,
-  done: () => void
+  done: () => void,
 ) {
   fastify.route<{
     Params: {
@@ -15,20 +14,14 @@ export default function userRouter(
       follow: boolean;
     };
   }>({
-    method: "POST",
-    url: "/:username/follow",
-    handler: async function (request, reply) {
+    method: 'POST',
+    url: '/:username/follow',
+    async handler(request, reply) {
       const { username } = request.params;
       const { follow } = request.body;
 
-      console.log(
-        { username, follow },
-        JSON.stringify(request.body),
-        request.body.follow
-      );
-
       if (!request.user) {
-        return reply.redirect("/auth/login");
+        return reply.redirect('/auth/login');
       }
 
       const user = await prisma.user.findUnique({
@@ -36,11 +29,11 @@ export default function userRouter(
       });
 
       if (!user) {
-        return reply.status(404).send({ message: "User not found" });
+        return reply.status(404).send({ message: 'User not found' });
       }
 
       if (user.id === request.user.id) {
-        return reply.status(400).send({ message: "Cannot follow yourself" });
+        return reply.status(400).send({ message: 'Cannot follow yourself' });
       }
 
       if (follow) {
@@ -77,7 +70,7 @@ export default function userRouter(
       const followingUsersCount = followingUsers?.following.length ?? 0;
 
       return reply.send({
-        message: "Success",
+        message: 'Success',
         isFollowing: follow,
         followingUsersCount,
       });

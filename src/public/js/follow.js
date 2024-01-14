@@ -1,37 +1,36 @@
-const followButton =
-  document.querySelector(".profile-header__action--follow") ||
-  document.querySelector(".profile-header__action--unfollow");
+const followButton = document.querySelector('.profile-header__action--follow')
+  || document.querySelector('.profile-header__action--unfollow');
 
-followButton?.addEventListener("click", async (e) => {
+followButton?.addEventListener('click', async (e) => {
   e.preventDefault();
 
-  const username = followButton.dataset.username;
+  const { username } = followButton.dataset;
   const isFollowing = followButton.classList.contains(
-    "profile-header__action--unfollow"
+    'profile-header__action--unfollow',
   );
 
   const res = await fetch(`/api/v1/user/${username}/follow`, {
-    method: "POST",
+    method: 'POST',
     body: JSON.stringify({ follow: !isFollowing }),
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
   });
 
   const data = await res.json();
 
   if (data.isFollowing) {
-    followButton.classList.remove("profile-header__action--follow");
-    followButton.classList.add("profile-header__action--unfollow");
-    followButton.textContent = "Unfollow";
+    followButton.classList.remove('profile-header__action--follow');
+    followButton.classList.add('profile-header__action--unfollow');
+    followButton.textContent = 'Unfollow';
   } else {
-    followButton.classList.remove("profile-header__action--unfollow");
-    followButton.classList.add("profile-header__action--follow");
-    followButton.textContent = "Follow";
+    followButton.classList.remove('profile-header__action--unfollow');
+    followButton.classList.add('profile-header__action--follow');
+    followButton.textContent = 'Follow';
   }
 
   const followerCount = document.querySelector(
-    ".profile-header__stat--followers"
+    '.profile-header__stat--followers',
   );
 
   followerCount.textContent = data.followingUsersCount;

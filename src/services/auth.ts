@@ -1,6 +1,30 @@
-import prisma from "../db";
-import bcrypt from "bcrypt";
-import { User } from "@prisma/client";
+import bcrypt from 'bcrypt';
+import { User } from '@prisma/client';
+import prisma from '../db';
+
+/**
+ * Creates a hash from a password
+ *
+ * @param password string
+ * @returns
+ */
+export async function hashPassword(password: string) {
+  const salt = await bcrypt.genSalt(10);
+  const hash = await bcrypt.hash(password, salt);
+  return hash;
+}
+
+/**
+ * Compares a password with a hashed password
+ *
+ * @param password string
+ * @param hashedPassword string
+ * @returns
+ */
+export async function verifyPassword(password: string, hashedPassword: string) {
+  const isValid = await bcrypt.compare(password, hashedPassword);
+  return isValid;
+}
 
 interface CreateUser {
   username: string;
@@ -27,7 +51,7 @@ export async function createUser({
   });
 
   if (existingUser) {
-    throw new Error("User already exists");
+    throw new Error('User already exists');
   }
 
   const hashedPassword = await hashPassword(password);
@@ -41,30 +65,6 @@ export async function createUser({
   });
 
   return user;
-}
-
-/**
- * Creates a hash from a password
- *
- * @param password string
- * @returns
- */
-export async function hashPassword(password: string) {
-  const salt = await bcrypt.genSalt(10);
-  const hash = await bcrypt.hash(password, salt);
-  return hash;
-}
-
-/**
- * Compares a password with a hashed password
- *
- * @param password string
- * @param hashedPassword string
- * @returns
- */
-export async function verifyPassword(password: string, hashedPassword: string) {
-  const isValid = await bcrypt.compare(password, hashedPassword);
-  return isValid;
 }
 
 /**
@@ -82,13 +82,13 @@ export async function login(username: string, password: string) {
   });
 
   if (!user) {
-    throw new Error("Invalid credentials");
+    throw new Error('Invalid credentials');
   }
 
   const isValid = await verifyPassword(password, user.password);
 
   if (!isValid) {
-    throw new Error("Invalid credentials");
+    throw new Error('Invalid credentials');
   }
 
   return user;

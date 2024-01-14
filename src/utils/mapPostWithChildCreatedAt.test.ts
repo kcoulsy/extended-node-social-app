@@ -1,10 +1,10 @@
-import { describe, expect, it } from "vitest";
-import { mapPostWithChildCreatedAt } from "./mapPostWithChildCreatedAt";
-import { PostWithAuthorAndChildrenWithReactions } from "../types";
+import { describe, expect, it } from 'vitest';
+import { mapPostWithChildCreatedAt } from './mapPostWithChildCreatedAt';
+import { PostWithAuthorAndChildrenWithReactions } from '../types';
 
 const mockPost: PostWithAuthorAndChildrenWithReactions = {
   id: 1,
-  content: "content",
+  content: 'content',
   createdAt: new Date(),
   updatedAt: new Date(),
   authorId: 1,
@@ -12,17 +12,17 @@ const mockPost: PostWithAuthorAndChildrenWithReactions = {
   parentPostId: null,
   author: {
     id: 1,
-    username: "username",
+    username: 'username',
     createdAt: new Date(),
     updatedAt: new Date(),
-    name: "name",
-    password: "password",
+    name: 'name',
+    password: 'password',
   },
   reactions: {},
   childPosts: [
     {
       id: 1,
-      content: "child post",
+      content: 'child post',
       createdAt: new Date(),
       updatedAt: new Date(),
       authorId: 1,
@@ -30,37 +30,37 @@ const mockPost: PostWithAuthorAndChildrenWithReactions = {
       parentPostId: null,
       author: {
         id: 1,
-        username: "username",
+        username: 'username',
         createdAt: new Date(),
         updatedAt: new Date(),
-        name: "name",
-        password: "password",
+        name: 'name',
+        password: 'password',
       },
       reactions: {},
     },
   ],
 };
 
-describe("mapPostWithChildCreatedAt", () => {
-  it("should map post with readable createdAt (now)", () => {
+describe('mapPostWithChildCreatedAt', () => {
+  it('should map post with readable createdAt (now)', () => {
     const result = mapPostWithChildCreatedAt(mockPost);
-    expect(result.createdAt).toBe("now");
+    expect(result.createdAt).toBe('now');
   });
 
-  it("should map post with readable createdAt (1 hour ago)", () => {
+  it('should map post with readable createdAt (1 hour ago)', () => {
     mockPost.createdAt = new Date(Date.now() - 1000 * 60 * 60);
     const result = mapPostWithChildCreatedAt(mockPost);
-    expect(result.createdAt).toBe("1 hour ago");
+    expect(result.createdAt).toBe('1 hour ago');
   });
 
   it('should map child posts with readable createdAt ("now")', () => {
     const result = mapPostWithChildCreatedAt(mockPost);
-    expect(result.childPosts[0].createdAt).toBe("now");
+    expect(result.childPosts[0].createdAt).toBe('now');
   });
 
   it('should map child posts with readable createdAt ("1 hour ago")', () => {
     mockPost.childPosts[0].createdAt = new Date(Date.now() - 1000 * 60 * 60);
     const result = mapPostWithChildCreatedAt(mockPost);
-    expect(result.childPosts[0].createdAt).toBe("1 hour ago");
+    expect(result.childPosts[0].createdAt).toBe('1 hour ago');
   });
 });

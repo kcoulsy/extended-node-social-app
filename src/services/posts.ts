@@ -1,7 +1,7 @@
-import { Post, User } from "@prisma/client";
-import prisma from "../db";
-import { mapPostWithChildCreatedAt } from "../utils/mapPostWithChildCreatedAt";
-import { mapPostSortChildPosts } from "../utils/mapPostSortChildPosts";
+import { Post, User } from '@prisma/client';
+import prisma from '../db';
+import { mapPostWithChildCreatedAt } from '../utils/mapPostWithChildCreatedAt';
+import { mapPostSortChildPosts } from '../utils/mapPostSortChildPosts';
 
 export type PostWithAuthorAndChildren = PostWithAuthor & {
   childPosts: PostWithAuthor[];
@@ -36,8 +36,8 @@ export async function createPost({
     data: {
       content,
       authorId: userId,
-      parentPostId: parentPostId ? parseInt(parentPostId) : undefined,
-      targetUserId: targetUserId ? targetUserId : undefined,
+      parentPostId: parentPostId ? parseInt(parentPostId, 10) : undefined,
+      targetUserId: targetUserId || undefined,
     },
     include: {
       author: true,
@@ -66,5 +66,6 @@ export async function createPost({
       reactions: {},
     })),
   });
+
   return mapPostWithChildCreatedAt(postWithSortedChildren);
 }
