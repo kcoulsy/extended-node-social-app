@@ -2,6 +2,8 @@
 
 Welcome to the Social Media NodeJS Server project! This is a server-side implementation of a social media application built using Node.js, Fastify, EJS, Prisma, Passport, and SQLite. The project focuses on server-side functionality, employing vanilla JavaScript for the frontend and BEM for styling. It is a rewrite and extension of [basic-express-social-app](https://github.com/kcoulsy/basic-express-social-app), while still having some limitations. The plan going forward will be to rewrite the whole project in Remix + Tailwind. So I've added tests to the services and utils so I can port those over without issues.
 
+![](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWYwamlsY3ZpaHlobmo2M3JydTJwNTFtNDcweTltYzZoY2p0NXU5MyZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/y0uDLNP5MKlZ2zA1XP/giphy.gif)
+
 ## Features
 
 1. **Authentication**
@@ -74,10 +76,6 @@ Welcome to the Social Media NodeJS Server project! This is a server-side impleme
    ```bash
    npm run start
    ```
-
-## Contributing
-
-Contributions are welcome! If you'd like to contribute, please follow the [contribution guidelines](CONTRIBUTING.md).
 
 ## License
 
